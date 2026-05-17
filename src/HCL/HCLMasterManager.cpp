@@ -8,6 +8,7 @@ MasterManager masterManager;
 MasterManager::MasterManager()
     : _enabled(false)
     , _applyBlocked(false)
+    , _masterCount(0)
     , _updateIntervalMs(60000)  // Default: 60 seconds
     , _fadeDurationSec(5)       // Default: 5 seconds
     , _lastUpdateMs(0)

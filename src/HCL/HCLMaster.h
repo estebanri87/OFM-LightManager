@@ -104,11 +104,15 @@ public:
     void setSunTimes(uint16_t sunriseMinutes, uint16_t sunsetMinutes);
     void clearSunTimes() { _sunTimesValid = false; }
     bool hasSunTimes() const { return _sunTimesValid; }
+    uint16_t getSunriseMinutes() const { return _sunriseMinutes; }
+    uint16_t getSunsetMinutes() const { return _sunsetMinutes; }
 
     void setSunOffsets(int16_t sunriseOffsetMin, int16_t sunsetOffsetMin) {
         _sunriseOffsetMin = sunriseOffsetMin;
         _sunsetOffsetMin = sunsetOffsetMin;
     }
+    int16_t getSunriseOffsetMin() const { return _sunriseOffsetMin; }
+    int16_t getSunsetOffsetMin() const { return _sunsetOffsetMin; }
 
     void setSlewRateKelvinPerMinute(uint16_t kelvinPerMinute) { _slewRateKelvinPerMinute = kelvinPerMinute; }
     uint16_t getSlewRateKelvinPerMinute() const { return _slewRateKelvinPerMinute; }

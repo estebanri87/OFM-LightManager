@@ -59,6 +59,20 @@ public:
     void setEnabled(bool enabled) { _enabled = enabled; }
 
     /**
+     * @brief Set number of configured masters (1..MAX_MASTERS).
+     *
+     * Should be called by the LightManager during setup based on the ETS
+     * `LMGHCLMasterCount` parameter. Consumers (e.g. HueGateway) use
+     * `getMasterCount()` to iterate only over configured masters.
+     */
+    void setMasterCount(uint8_t count) { _masterCount = (count > MAX_MASTERS) ? MAX_MASTERS : count; }
+
+    /**
+     * @brief Get number of configured masters (0..MAX_MASTERS).
+     */
+    uint8_t getMasterCount() const { return _masterCount; }
+
+    /**
      * @brief Block or allow applying HCL values to lights.
      *
      * When blocked, the manager still keeps calculating current values
@@ -125,6 +139,7 @@ private:
     bool _enabled;
     bool _applyBlocked;
     bool _masterApplyBlocked[MAX_MASTERS];
+    uint8_t _masterCount;        // Configured masters (0..MAX_MASTERS), set by LightManager
     uint16_t _updateIntervalMs;  // Update interval in milliseconds
     uint8_t _fadeDurationSec;    // Fade duration in seconds
     uint32_t _lastUpdateMs;      // Last update timestamp

@@ -878,6 +878,13 @@ void LightManagerModule::setupHclFromParams()
     const bool enabled = true;
     #endif
     HCL::masterManager.setEnabled(enabled);
+
+    #ifdef ParamLMG_LMGHCLMasterCount
+    HCL::masterManager.setMasterCount(ParamLMG_LMGHCLMasterCount);
+    #else
+    HCL::masterManager.setMasterCount(0);
+    #endif
+
     if (!enabled)
     {
         Serial.println("[LightManagerModule] HCL disabled");
