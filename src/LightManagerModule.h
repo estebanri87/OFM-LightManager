@@ -50,6 +50,7 @@ public:
     void readFlash(const uint8_t* data, const uint16_t size) override;
 
     void registerOutput(uint8_t masterNum, ILightManagerOutput* target);
+    void unregisterOutput(ILightManagerOutput* target);
     void notifyOutputActive(uint8_t masterNum, bool active);
 
     // Public for use by HueGatewayModule during migration (Phase 4)

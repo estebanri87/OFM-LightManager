@@ -706,7 +706,43 @@ void LightManagerModule::registerOutput(uint8_t masterNum, ILightManagerOutput* 
     if (masterNum < 1 || masterNum > HCL::MasterManager::MAX_MASTERS || target == nullptr)
         return;
 
+    // Dedupe: remove any prior registration of the same target (any master) to
+    // avoid duplicates when setupDevices() runs multiple times.
+    for (auto it = _outputs.begin(); it != _outputs.end();)
+    {
+        if (it->target == target)
+            it = _outputs.erase(it);
+        else
+            ++it;
+    }
+
     _outputs.push_back({masterNum, target});
+
+    // Immediately push the current value so newly registered (or re-registered)
+    // outputs receive the HCL setpoint without waiting for the next change.
+    const uint8_t idx = masterNum - 1;
+    const bool blocked = HCL::masterManager.isApplyBlocked() ||
+                         HCL::masterManager.isMasterApplyBlocked(masterNum);
+    if (!blocked)
+    {
+        const HCL::InterpolatedValue val = HCL::masterManager.getCurrentValue(masterNum);
+        const uint8_t fadeDuration = HCL::masterManager.getFadeDuration();
+        target->onLightManagerValue(masterNum, val.kelvin, val.brightness, fadeDuration);
+        _lastPushedValues[idx] = val;
+    }
+}
+
+void LightManagerModule::unregisterOutput(ILightManagerOutput* target)
+{
+    if (target == nullptr)
+        return;
+    for (auto it = _outputs.begin(); it != _outputs.end();)
+    {
+        if (it->target == target)
+            it = _outputs.erase(it);
+        else
+            ++it;
+    }
 }
 
 void LightManagerModule::notifyOutputActive(uint8_t masterNum, bool active)
