@@ -122,7 +122,7 @@ void MasterManager::setMasterDaytime(uint8_t masterNum, bool isDaytime) {
 bool MasterManager::isMasterAdaptiveActive(uint8_t masterNum) const {
     if (masterNum < 1 || masterNum > MAX_MASTERS) return false;
     uint32_t now = millis();
-    // Aktuelle Uhrzeit nicht vorhanden → konservativ aus _lastTimeMinutes lesen
+    // Aktuelle Uhrzeit nicht vorhanden ÔåÆ konservativ aus _lastTimeMinutes lesen
     return _masters[masterNum - 1].isAdaptiveCurrentlyActive(_lastTimeMinutes, now);
 }
 

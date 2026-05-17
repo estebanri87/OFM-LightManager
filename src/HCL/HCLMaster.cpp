@@ -338,7 +338,7 @@ InterpolatedValue Master::calculateAstronomicalValue(uint16_t currentTimeMinutes
     const float zenith = acosf(cosZenith);
     const float elevationDeg = 90.0f - (zenith * (180.0f / pi));
 
-    // Map solar elevation to a smooth day profile: -6°..60° => 0..1
+    // Map solar elevation to a smooth day profile: -6┬░..60┬░ => 0..1
     float t = (elevationDeg + 6.0f) / 66.0f;
     t = constrain(t, 0.0f, 1.0f);
     const float smooth = t * t * (3.0f - 2.0f * t);
@@ -510,7 +510,7 @@ InterpolatedValue Master::applyAdaptiveBrightness(InterpolatedValue val, uint16_
         output = static_cast<uint8_t>(constrain(static_cast<int>(raw + 0.5f), _adaptiveConfig.minBrightness, ceiling));
     }
 
-    // Mindestschrittgröße
+    // Mindestschrittgr├Â├ƒe
     if (_lastSentBrightness != 255) {
         uint8_t diff = (output > _lastSentBrightness) ? (output - _lastSentBrightness) : (_lastSentBrightness - output);
         if (diff < _adaptiveConfig.minChangePercent) {

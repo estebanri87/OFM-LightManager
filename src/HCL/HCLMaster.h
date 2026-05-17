@@ -142,6 +142,7 @@ public:
     bool setSummerSetpoint(uint8_t index, const Setpoint& setpoint);
     void sortSummerSetpoints();
     void setIsSummer(bool isSummer) { _isSummer = isSummer; }
+    bool isSummer() const { return _isSummer; }
     
     /**
      * @brief Check whether the configured curve can produce valid output

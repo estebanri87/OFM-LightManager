@@ -6,17 +6,17 @@
 namespace HCL {
 
 /**
- * @brief Manages up to 8 HCL Masters and provides continuous updates
+ * @brief Manages up to 16 HCL Masters and provides continuous updates
  * 
  * This class:
- * - Manages up to 8 HCL Master instances
+ * - Manages up to 16 HCL Master instances
  * - Calculates current values based on time
  * - Provides continuous fade updates for lights
  * - Handles immediate switch-on with correct HCL values
  */
 class MasterManager {
 public:
-    static constexpr uint8_t MAX_MASTERS = 8;
+    static constexpr uint8_t MAX_MASTERS = 16;
     
     /**
      * @brief Constructor
@@ -35,15 +35,15 @@ public:
     void loop(uint16_t currentTimeMinutes, int16_t dayOfYear = -1);
     
     /**
-    * @brief Get a HCL Master by index (1-8)
-    * @param masterNum Master number (1-8)
+    * @brief Get a HCL Master by index (1-16)
+    * @param masterNum Master number (1-16)
      * @return Pointer to master or nullptr if invalid
      */
     Master* getMaster(uint8_t masterNum);
     
     /**
      * @brief Get current interpolated value for a master
-    * @param masterNum Master number (1-8)
+    * @param masterNum Master number (1-16)
      * @return Current interpolated value
      */
     InterpolatedValue getCurrentValue(uint8_t masterNum) const;
@@ -73,14 +73,14 @@ public:
 
     /**
      * @brief Block or allow applying HCL values for a specific master.
-    * @param masterNum Master number (1-8)
+    * @param masterNum Master number (1-16)
      * @param blocked True to block HCL apply for this master
      */
     void setMasterApplyBlocked(uint8_t masterNum, bool blocked);
 
     /**
      * @brief Returns whether applying HCL values is blocked for a specific master.
-    * @param masterNum Master number (1-8)
+    * @param masterNum Master number (1-16)
      */
     bool isMasterApplyBlocked(uint8_t masterNum) const;
     
