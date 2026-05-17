@@ -3634,134 +3634,134 @@
               <ComObjectRef Id="%AID%_O-%TT%00003_R-%TT%0000301" RefId="%AID%_O-%TT%00003" />
               <ComObjectRef Id="%AID%_O-%TT%00004_R-%TT%0000401" RefId="%AID%_O-%TT%00004" />
               <ComObjectRef Id="%AID%_O-%TT%00037_R-%TT%0003701" RefId="%AID%_O-%TT%00037" />
-              <ComObjectRef Id="%AID%_O-%TT%00005_R-%TT%0000501" RefId="%AID%_O-%TT%00005" />
-              <ComObjectRef Id="%AID%_O-%TT%00006_R-%TT%0000601" RefId="%AID%_O-%TT%00006" />
-              <ComObjectRef Id="%AID%_O-%TT%00007_R-%TT%0000701" RefId="%AID%_O-%TT%00007" />
-              <ComObjectRef Id="%AID%_O-%TT%00008_R-%TT%0000801" RefId="%AID%_O-%TT%00008" />
-              <ComObjectRef Id="%AID%_O-%TT%00009_R-%TT%0000901" RefId="%AID%_O-%TT%00009" />
-              <ComObjectRef Id="%AID%_O-%TT%00010_R-%TT%0001001" RefId="%AID%_O-%TT%00010" />
-              <ComObjectRef Id="%AID%_O-%TT%00011_R-%TT%0001101" RefId="%AID%_O-%TT%00011" />
-              <ComObjectRef Id="%AID%_O-%TT%00012_R-%TT%0001201" RefId="%AID%_O-%TT%00012" />
-              <ComObjectRef Id="%AID%_O-%TT%00021_R-%TT%0002101" RefId="%AID%_O-%TT%00021" />
-              <ComObjectRef Id="%AID%_O-%TT%00022_R-%TT%0002201" RefId="%AID%_O-%TT%00022" />
-              <ComObjectRef Id="%AID%_O-%TT%00023_R-%TT%0002301" RefId="%AID%_O-%TT%00023" />
-              <ComObjectRef Id="%AID%_O-%TT%00024_R-%TT%0002401" RefId="%AID%_O-%TT%00024" />
-              <ComObjectRef Id="%AID%_O-%TT%00025_R-%TT%0002501" RefId="%AID%_O-%TT%00025" />
-              <ComObjectRef Id="%AID%_O-%TT%00026_R-%TT%0002601" RefId="%AID%_O-%TT%00026" />
-              <ComObjectRef Id="%AID%_O-%TT%00027_R-%TT%0002701" RefId="%AID%_O-%TT%00027" />
-              <ComObjectRef Id="%AID%_O-%TT%00028_R-%TT%0002801" RefId="%AID%_O-%TT%00028" />
-              <ComObjectRef Id="%AID%_O-%TT%00013_R-%TT%0001301" RefId="%AID%_O-%TT%00013" />
-              <ComObjectRef Id="%AID%_O-%TT%00014_R-%TT%0001401" RefId="%AID%_O-%TT%00014" />
-              <ComObjectRef Id="%AID%_O-%TT%00015_R-%TT%0001501" RefId="%AID%_O-%TT%00015" />
-              <ComObjectRef Id="%AID%_O-%TT%00016_R-%TT%0001601" RefId="%AID%_O-%TT%00016" />
-              <ComObjectRef Id="%AID%_O-%TT%00017_R-%TT%0001701" RefId="%AID%_O-%TT%00017" />
-              <ComObjectRef Id="%AID%_O-%TT%00018_R-%TT%0001801" RefId="%AID%_O-%TT%00018" />
-              <ComObjectRef Id="%AID%_O-%TT%00019_R-%TT%0001901" RefId="%AID%_O-%TT%00019" />
-              <ComObjectRef Id="%AID%_O-%TT%00020_R-%TT%0002001" RefId="%AID%_O-%TT%00020" />
-              <ComObjectRef Id="%AID%_O-%TT%00029_R-%TT%0002901" RefId="%AID%_O-%TT%00029" />
-              <ComObjectRef Id="%AID%_O-%TT%00030_R-%TT%0003001" RefId="%AID%_O-%TT%00030" />
-              <ComObjectRef Id="%AID%_O-%TT%00031_R-%TT%0003101" RefId="%AID%_O-%TT%00031" />
-              <ComObjectRef Id="%AID%_O-%TT%00032_R-%TT%0003201" RefId="%AID%_O-%TT%00032" />
-              <ComObjectRef Id="%AID%_O-%TT%00033_R-%TT%0003301" RefId="%AID%_O-%TT%00033" />
-              <ComObjectRef Id="%AID%_O-%TT%00034_R-%TT%0003401" RefId="%AID%_O-%TT%00034" />
-              <ComObjectRef Id="%AID%_O-%TT%00035_R-%TT%0003501" RefId="%AID%_O-%TT%00035" />
-              <ComObjectRef Id="%AID%_O-%TT%00036_R-%TT%0003601" RefId="%AID%_O-%TT%00036" />
-              <ComObjectRef Id="%AID%_O-%TT%00038_R-%TT%0003801" RefId="%AID%_O-%TT%00038" />
-              <ComObjectRef Id="%AID%_O-%TT%00039_R-%TT%0003901" RefId="%AID%_O-%TT%00039" />
-              <ComObjectRef Id="%AID%_O-%TT%00040_R-%TT%0004001" RefId="%AID%_O-%TT%00040" />
-              <ComObjectRef Id="%AID%_O-%TT%00041_R-%TT%0004101" RefId="%AID%_O-%TT%00041" />
-              <ComObjectRef Id="%AID%_O-%TT%00042_R-%TT%0004201" RefId="%AID%_O-%TT%00042" />
-              <ComObjectRef Id="%AID%_O-%TT%00043_R-%TT%0004301" RefId="%AID%_O-%TT%00043" />
-              <ComObjectRef Id="%AID%_O-%TT%00044_R-%TT%0004401" RefId="%AID%_O-%TT%00044" />
-              <ComObjectRef Id="%AID%_O-%TT%00045_R-%TT%0004501" RefId="%AID%_O-%TT%00045" />
-              <ComObjectRef Id="%AID%_O-%TT%000046_R-%TT%00004601" RefId="%AID%_O-%TT%000046" />
-              <ComObjectRef Id="%AID%_O-%TT%000047_R-%TT%00004701" RefId="%AID%_O-%TT%000047" />
-              <ComObjectRef Id="%AID%_O-%TT%000048_R-%TT%00004801" RefId="%AID%_O-%TT%000048" />
-              <ComObjectRef Id="%AID%_O-%TT%000049_R-%TT%00004901" RefId="%AID%_O-%TT%000049" />
-              <ComObjectRef Id="%AID%_O-%TT%000050_R-%TT%00005001" RefId="%AID%_O-%TT%000050" />
-              <ComObjectRef Id="%AID%_O-%TT%000051_R-%TT%00005101" RefId="%AID%_O-%TT%000051" />
-              <ComObjectRef Id="%AID%_O-%TT%000052_R-%TT%00005201" RefId="%AID%_O-%TT%000052" />
-              <ComObjectRef Id="%AID%_O-%TT%000053_R-%TT%00005301" RefId="%AID%_O-%TT%000053" />
-              <ComObjectRef Id="%AID%_O-%TT%000054_R-%TT%00005401" RefId="%AID%_O-%TT%000054" />
-              <ComObjectRef Id="%AID%_O-%TT%000055_R-%TT%00005501" RefId="%AID%_O-%TT%000055" />
-              <ComObjectRef Id="%AID%_O-%TT%000056_R-%TT%00005601" RefId="%AID%_O-%TT%000056" />
-              <ComObjectRef Id="%AID%_O-%TT%000057_R-%TT%00005701" RefId="%AID%_O-%TT%000057" />
-              <ComObjectRef Id="%AID%_O-%TT%000058_R-%TT%00005801" RefId="%AID%_O-%TT%000058" />
-              <ComObjectRef Id="%AID%_O-%TT%000059_R-%TT%00005901" RefId="%AID%_O-%TT%000059" />
-              <ComObjectRef Id="%AID%_O-%TT%000060_R-%TT%00006001" RefId="%AID%_O-%TT%000060" />
-              <ComObjectRef Id="%AID%_O-%TT%000061_R-%TT%00006101" RefId="%AID%_O-%TT%000061" />
-              <ComObjectRef Id="%AID%_O-%TT%000062_R-%TT%00006201" RefId="%AID%_O-%TT%000062" />
-              <ComObjectRef Id="%AID%_O-%TT%000063_R-%TT%00006301" RefId="%AID%_O-%TT%000063" />
-              <ComObjectRef Id="%AID%_O-%TT%000064_R-%TT%00006401" RefId="%AID%_O-%TT%000064" />
-              <ComObjectRef Id="%AID%_O-%TT%000065_R-%TT%00006501" RefId="%AID%_O-%TT%000065" />
-              <ComObjectRef Id="%AID%_O-%TT%000066_R-%TT%00006601" RefId="%AID%_O-%TT%000066" />
-              <ComObjectRef Id="%AID%_O-%TT%000067_R-%TT%00006701" RefId="%AID%_O-%TT%000067" />
-              <ComObjectRef Id="%AID%_O-%TT%000068_R-%TT%00006801" RefId="%AID%_O-%TT%000068" />
-              <ComObjectRef Id="%AID%_O-%TT%000069_R-%TT%00006901" RefId="%AID%_O-%TT%000069" />
-              <ComObjectRef Id="%AID%_O-%TT%000070_R-%TT%00007001" RefId="%AID%_O-%TT%000070" />
-              <ComObjectRef Id="%AID%_O-%TT%000071_R-%TT%00007101" RefId="%AID%_O-%TT%000071" />
-              <ComObjectRef Id="%AID%_O-%TT%000072_R-%TT%00007201" RefId="%AID%_O-%TT%000072" />
-              <ComObjectRef Id="%AID%_O-%TT%000073_R-%TT%00007301" RefId="%AID%_O-%TT%000073" />
-              <ComObjectRef Id="%AID%_O-%TT%000074_R-%TT%00007401" RefId="%AID%_O-%TT%000074" />
-              <ComObjectRef Id="%AID%_O-%TT%000075_R-%TT%00007501" RefId="%AID%_O-%TT%000075" />
-              <ComObjectRef Id="%AID%_O-%TT%000076_R-%TT%00007601" RefId="%AID%_O-%TT%000076" />
-              <ComObjectRef Id="%AID%_O-%TT%000077_R-%TT%00007701" RefId="%AID%_O-%TT%000077" />
-              <ComObjectRef Id="%AID%_O-%TT%000078_R-%TT%00007801" RefId="%AID%_O-%TT%000078" />
-              <ComObjectRef Id="%AID%_O-%TT%000079_R-%TT%00007901" RefId="%AID%_O-%TT%000079" />
-              <ComObjectRef Id="%AID%_O-%TT%000080_R-%TT%00008001" RefId="%AID%_O-%TT%000080" />
-              <ComObjectRef Id="%AID%_O-%TT%000081_R-%TT%00008101" RefId="%AID%_O-%TT%000081" />
-              <ComObjectRef Id="%AID%_O-%TT%000082_R-%TT%00008201" RefId="%AID%_O-%TT%000082" />
-              <ComObjectRef Id="%AID%_O-%TT%000083_R-%TT%00008301" RefId="%AID%_O-%TT%000083" />
-              <ComObjectRef Id="%AID%_O-%TT%000084_R-%TT%00008401" RefId="%AID%_O-%TT%000084" />
-              <ComObjectRef Id="%AID%_O-%TT%000085_R-%TT%00008501" RefId="%AID%_O-%TT%000085" />
-              <ComObjectRef Id="%AID%_O-%TT%000086_R-%TT%00008601" RefId="%AID%_O-%TT%000086" />
-              <ComObjectRef Id="%AID%_O-%TT%000087_R-%TT%00008701" RefId="%AID%_O-%TT%000087" />
-              <ComObjectRef Id="%AID%_O-%TT%000088_R-%TT%00008801" RefId="%AID%_O-%TT%000088" />
-              <ComObjectRef Id="%AID%_O-%TT%000089_R-%TT%00008901" RefId="%AID%_O-%TT%000089" />
-              <ComObjectRef Id="%AID%_O-%TT%000090_R-%TT%00009001" RefId="%AID%_O-%TT%000090" />
-              <ComObjectRef Id="%AID%_O-%TT%000091_R-%TT%00009101" RefId="%AID%_O-%TT%000091" />
-              <ComObjectRef Id="%AID%_O-%TT%000092_R-%TT%00009201" RefId="%AID%_O-%TT%000092" />
-              <ComObjectRef Id="%AID%_O-%TT%000093_R-%TT%00009301" RefId="%AID%_O-%TT%000093" />
-              <ComObjectRef Id="%AID%_O-%TT%000094_R-%TT%00009401" RefId="%AID%_O-%TT%000094" />
-              <ComObjectRef Id="%AID%_O-%TT%000095_R-%TT%00009501" RefId="%AID%_O-%TT%000095" />
-              <ComObjectRef Id="%AID%_O-%TT%000096_R-%TT%00009601" RefId="%AID%_O-%TT%000096" />
-              <ComObjectRef Id="%AID%_O-%TT%000097_R-%TT%00009701" RefId="%AID%_O-%TT%000097" />
-              <ComObjectRef Id="%AID%_O-%TT%000098_R-%TT%00009801" RefId="%AID%_O-%TT%000098" />
-              <ComObjectRef Id="%AID%_O-%TT%000099_R-%TT%00009901" RefId="%AID%_O-%TT%000099" />
-              <ComObjectRef Id="%AID%_O-%TT%000100_R-%TT%00010001" RefId="%AID%_O-%TT%000100" />
-              <ComObjectRef Id="%AID%_O-%TT%000101_R-%TT%00010101" RefId="%AID%_O-%TT%000101" />
-              <ComObjectRef Id="%AID%_O-%TT%000102_R-%TT%00010201" RefId="%AID%_O-%TT%000102" />
-              <ComObjectRef Id="%AID%_O-%TT%000103_R-%TT%00010301" RefId="%AID%_O-%TT%000103" />
-              <ComObjectRef Id="%AID%_O-%TT%000104_R-%TT%00010401" RefId="%AID%_O-%TT%000104" />
-              <ComObjectRef Id="%AID%_O-%TT%000105_R-%TT%00010501" RefId="%AID%_O-%TT%000105" />
-              <ComObjectRef Id="%AID%_O-%TT%000106_R-%TT%00010601" RefId="%AID%_O-%TT%000106" />
-              <ComObjectRef Id="%AID%_O-%TT%000107_R-%TT%00010701" RefId="%AID%_O-%TT%000107" />
-              <ComObjectRef Id="%AID%_O-%TT%000108_R-%TT%00010801" RefId="%AID%_O-%TT%000108" />
-              <ComObjectRef Id="%AID%_O-%TT%000109_R-%TT%00010901" RefId="%AID%_O-%TT%000109" />
-              <ComObjectRef Id="%AID%_O-%TT%000110_R-%TT%00011001" RefId="%AID%_O-%TT%000110" />
-              <ComObjectRef Id="%AID%_O-%TT%000111_R-%TT%00011101" RefId="%AID%_O-%TT%000111" />
-              <ComObjectRef Id="%AID%_O-%TT%000112_R-%TT%00011201" RefId="%AID%_O-%TT%000112" />
-              <ComObjectRef Id="%AID%_O-%TT%000113_R-%TT%00011301" RefId="%AID%_O-%TT%000113" />
-              <ComObjectRef Id="%AID%_O-%TT%000114_R-%TT%00011401" RefId="%AID%_O-%TT%000114" />
-              <ComObjectRef Id="%AID%_O-%TT%000115_R-%TT%00011501" RefId="%AID%_O-%TT%000115" />
-              <ComObjectRef Id="%AID%_O-%TT%000116_R-%TT%00011601" RefId="%AID%_O-%TT%000116" />
-              <ComObjectRef Id="%AID%_O-%TT%000117_R-%TT%00011701" RefId="%AID%_O-%TT%000117" />
-              <ComObjectRef Id="%AID%_O-%TT%000118_R-%TT%00011801" RefId="%AID%_O-%TT%000118" />
-              <ComObjectRef Id="%AID%_O-%TT%000119_R-%TT%00011901" RefId="%AID%_O-%TT%000119" />
-              <ComObjectRef Id="%AID%_O-%TT%000120_R-%TT%00012001" RefId="%AID%_O-%TT%000120" />
-              <ComObjectRef Id="%AID%_O-%TT%000121_R-%TT%00012101" RefId="%AID%_O-%TT%000121" />
-              <ComObjectRef Id="%AID%_O-%TT%000122_R-%TT%00012201" RefId="%AID%_O-%TT%000122" />
-              <ComObjectRef Id="%AID%_O-%TT%000123_R-%TT%00012301" RefId="%AID%_O-%TT%000123" />
-              <ComObjectRef Id="%AID%_O-%TT%000124_R-%TT%00012401" RefId="%AID%_O-%TT%000124" />
-              <ComObjectRef Id="%AID%_O-%TT%000125_R-%TT%00012501" RefId="%AID%_O-%TT%000125" />
-              <ComObjectRef Id="%AID%_O-%TT%000126_R-%TT%00012601" RefId="%AID%_O-%TT%000126" />
-              <ComObjectRef Id="%AID%_O-%TT%000127_R-%TT%00012701" RefId="%AID%_O-%TT%000127" />
-              <ComObjectRef Id="%AID%_O-%TT%000128_R-%TT%00012801" RefId="%AID%_O-%TT%000128" />
-              <ComObjectRef Id="%AID%_O-%TT%000129_R-%TT%00012901" RefId="%AID%_O-%TT%000129" />
-              <ComObjectRef Id="%AID%_O-%TT%000130_R-%TT%00013001" RefId="%AID%_O-%TT%000130" />
-              <ComObjectRef Id="%AID%_O-%TT%000131_R-%TT%00013101" RefId="%AID%_O-%TT%000131" />
-              <ComObjectRef Id="%AID%_O-%TT%000132_R-%TT%00013201" RefId="%AID%_O-%TT%000132" />
-              <ComObjectRef Id="%AID%_O-%TT%000133_R-%TT%00013301" RefId="%AID%_O-%TT%000133" />
+              <ComObjectRef Id="%AID%_O-%TT%00005_R-%TT%0000501" RefId="%AID%_O-%TT%00005"  Text="{{0:LM 1}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00006_R-%TT%0000601" RefId="%AID%_O-%TT%00006"  Text="{{0:LM 1}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00007_R-%TT%0000701" RefId="%AID%_O-%TT%00007"  Text="{{0:LM 2}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00008_R-%TT%0000801" RefId="%AID%_O-%TT%00008"  Text="{{0:LM 2}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00009_R-%TT%0000901" RefId="%AID%_O-%TT%00009"  Text="{{0:LM 3}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00010_R-%TT%0001001" RefId="%AID%_O-%TT%00010"  Text="{{0:LM 3}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00011_R-%TT%0001101" RefId="%AID%_O-%TT%00011"  Text="{{0:LM 4}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00012_R-%TT%0001201" RefId="%AID%_O-%TT%00012"  Text="{{0:LM 4}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00021_R-%TT%0002101" RefId="%AID%_O-%TT%00021"  Text="{{0:LM 5}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00022_R-%TT%0002201" RefId="%AID%_O-%TT%00022"  Text="{{0:LM 5}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00023_R-%TT%0002301" RefId="%AID%_O-%TT%00023"  Text="{{0:LM 6}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00024_R-%TT%0002401" RefId="%AID%_O-%TT%00024"  Text="{{0:LM 6}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00025_R-%TT%0002501" RefId="%AID%_O-%TT%00025"  Text="{{0:LM 7}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00026_R-%TT%0002601" RefId="%AID%_O-%TT%00026"  Text="{{0:LM 7}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00027_R-%TT%0002701" RefId="%AID%_O-%TT%00027"  Text="{{0:LM 8}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00028_R-%TT%0002801" RefId="%AID%_O-%TT%00028"  Text="{{0:LM 8}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00013_R-%TT%0001301" RefId="%AID%_O-%TT%00013"  Text="{{0:LM 1}}: Sperre" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00014_R-%TT%0001401" RefId="%AID%_O-%TT%00014"  Text="{{0:LM 1}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00015_R-%TT%0001501" RefId="%AID%_O-%TT%00015"  Text="{{0:LM 2}}: Sperre" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00016_R-%TT%0001601" RefId="%AID%_O-%TT%00016"  Text="{{0:LM 2}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00017_R-%TT%0001701" RefId="%AID%_O-%TT%00017"  Text="{{0:LM 3}}: Sperre" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00018_R-%TT%0001801" RefId="%AID%_O-%TT%00018"  Text="{{0:LM 3}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00019_R-%TT%0001901" RefId="%AID%_O-%TT%00019"  Text="{{0:LM 4}}: Sperre" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00020_R-%TT%0002001" RefId="%AID%_O-%TT%00020"  Text="{{0:LM 4}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00029_R-%TT%0002901" RefId="%AID%_O-%TT%00029"  Text="{{0:LM 5}}: Sperre" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00030_R-%TT%0003001" RefId="%AID%_O-%TT%00030"  Text="{{0:LM 5}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00031_R-%TT%0003101" RefId="%AID%_O-%TT%00031"  Text="{{0:LM 6}}: Sperre" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00032_R-%TT%0003201" RefId="%AID%_O-%TT%00032"  Text="{{0:LM 6}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00033_R-%TT%0003301" RefId="%AID%_O-%TT%00033"  Text="{{0:LM 7}}: Sperre" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00034_R-%TT%0003401" RefId="%AID%_O-%TT%00034"  Text="{{0:LM 7}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00035_R-%TT%0003501" RefId="%AID%_O-%TT%00035"  Text="{{0:LM 8}}: Sperre" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00036_R-%TT%0003601" RefId="%AID%_O-%TT%00036"  Text="{{0:LM 8}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00038_R-%TT%0003801" RefId="%AID%_O-%TT%00038"  Text="{{0:LM 1}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00039_R-%TT%0003901" RefId="%AID%_O-%TT%00039"  Text="{{0:LM 2}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00040_R-%TT%0004001" RefId="%AID%_O-%TT%00040"  Text="{{0:LM 3}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00041_R-%TT%0004101" RefId="%AID%_O-%TT%00041"  Text="{{0:LM 4}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00042_R-%TT%0004201" RefId="%AID%_O-%TT%00042"  Text="{{0:LM 5}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00043_R-%TT%0004301" RefId="%AID%_O-%TT%00043"  Text="{{0:LM 6}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00044_R-%TT%0004401" RefId="%AID%_O-%TT%00044"  Text="{{0:LM 7}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%00045_R-%TT%0004501" RefId="%AID%_O-%TT%00045"  Text="{{0:LM 8}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000046_R-%TT%00004601" RefId="%AID%_O-%TT%000046"  Text="{{0:LM 1}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000047_R-%TT%00004701" RefId="%AID%_O-%TT%000047"  Text="{{0:LM 1}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000048_R-%TT%00004801" RefId="%AID%_O-%TT%000048"  Text="{{0:LM 1}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%10100_R-%TT%1010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000049_R-%TT%00004901" RefId="%AID%_O-%TT%000049"  Text="{{0:LM 2}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000050_R-%TT%00005001" RefId="%AID%_O-%TT%000050"  Text="{{0:LM 2}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000051_R-%TT%00005101" RefId="%AID%_O-%TT%000051"  Text="{{0:LM 2}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%20100_R-%TT%2010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000052_R-%TT%00005201" RefId="%AID%_O-%TT%000052"  Text="{{0:LM 3}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000053_R-%TT%00005301" RefId="%AID%_O-%TT%000053"  Text="{{0:LM 3}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000054_R-%TT%00005401" RefId="%AID%_O-%TT%000054"  Text="{{0:LM 3}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%30100_R-%TT%3010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000055_R-%TT%00005501" RefId="%AID%_O-%TT%000055"  Text="{{0:LM 4}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000056_R-%TT%00005601" RefId="%AID%_O-%TT%000056"  Text="{{0:LM 4}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000057_R-%TT%00005701" RefId="%AID%_O-%TT%000057"  Text="{{0:LM 4}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%40100_R-%TT%4010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000058_R-%TT%00005801" RefId="%AID%_O-%TT%000058"  Text="{{0:LM 5}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000059_R-%TT%00005901" RefId="%AID%_O-%TT%000059"  Text="{{0:LM 5}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000060_R-%TT%00006001" RefId="%AID%_O-%TT%000060"  Text="{{0:LM 5}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%50100_R-%TT%5010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000061_R-%TT%00006101" RefId="%AID%_O-%TT%000061"  Text="{{0:LM 6}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000062_R-%TT%00006201" RefId="%AID%_O-%TT%000062"  Text="{{0:LM 6}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000063_R-%TT%00006301" RefId="%AID%_O-%TT%000063"  Text="{{0:LM 6}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%60100_R-%TT%6010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000064_R-%TT%00006401" RefId="%AID%_O-%TT%000064"  Text="{{0:LM 7}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000065_R-%TT%00006501" RefId="%AID%_O-%TT%000065"  Text="{{0:LM 7}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000066_R-%TT%00006601" RefId="%AID%_O-%TT%000066"  Text="{{0:LM 7}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%70100_R-%TT%7010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000067_R-%TT%00006701" RefId="%AID%_O-%TT%000067"  Text="{{0:LM 8}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000068_R-%TT%00006801" RefId="%AID%_O-%TT%000068"  Text="{{0:LM 8}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000069_R-%TT%00006901" RefId="%AID%_O-%TT%000069"  Text="{{0:LM 8}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%80100_R-%TT%8010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000070_R-%TT%00007001" RefId="%AID%_O-%TT%000070"  Text="{{0:LM 9}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000071_R-%TT%00007101" RefId="%AID%_O-%TT%000071"  Text="{{0:LM 9}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000072_R-%TT%00007201" RefId="%AID%_O-%TT%000072"  Text="{{0:LM 9}}: Sperre" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000073_R-%TT%00007301" RefId="%AID%_O-%TT%000073"  Text="{{0:LM 9}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000074_R-%TT%00007401" RefId="%AID%_O-%TT%000074"  Text="{{0:LM 9}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000075_R-%TT%00007501" RefId="%AID%_O-%TT%000075"  Text="{{0:LM 9}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000076_R-%TT%00007601" RefId="%AID%_O-%TT%000076"  Text="{{0:LM 9}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000077_R-%TT%00007701" RefId="%AID%_O-%TT%000077"  Text="{{0:LM 9}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%90100_R-%TT%9010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000078_R-%TT%00007801" RefId="%AID%_O-%TT%000078"  Text="{{0:LM 10}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000079_R-%TT%00007901" RefId="%AID%_O-%TT%000079"  Text="{{0:LM 10}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000080_R-%TT%00008001" RefId="%AID%_O-%TT%000080"  Text="{{0:LM 10}}: Sperre" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000081_R-%TT%00008101" RefId="%AID%_O-%TT%000081"  Text="{{0:LM 10}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000082_R-%TT%00008201" RefId="%AID%_O-%TT%000082"  Text="{{0:LM 10}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000083_R-%TT%00008301" RefId="%AID%_O-%TT%000083"  Text="{{0:LM 10}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000084_R-%TT%00008401" RefId="%AID%_O-%TT%000084"  Text="{{0:LM 10}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000085_R-%TT%00008501" RefId="%AID%_O-%TT%000085"  Text="{{0:LM 10}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%100100_R-%TT%10010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000086_R-%TT%00008601" RefId="%AID%_O-%TT%000086"  Text="{{0:LM 11}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000087_R-%TT%00008701" RefId="%AID%_O-%TT%000087"  Text="{{0:LM 11}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000088_R-%TT%00008801" RefId="%AID%_O-%TT%000088"  Text="{{0:LM 11}}: Sperre" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000089_R-%TT%00008901" RefId="%AID%_O-%TT%000089"  Text="{{0:LM 11}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000090_R-%TT%00009001" RefId="%AID%_O-%TT%000090"  Text="{{0:LM 11}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000091_R-%TT%00009101" RefId="%AID%_O-%TT%000091"  Text="{{0:LM 11}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000092_R-%TT%00009201" RefId="%AID%_O-%TT%000092"  Text="{{0:LM 11}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000093_R-%TT%00009301" RefId="%AID%_O-%TT%000093"  Text="{{0:LM 11}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%110100_R-%TT%11010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000094_R-%TT%00009401" RefId="%AID%_O-%TT%000094"  Text="{{0:LM 12}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000095_R-%TT%00009501" RefId="%AID%_O-%TT%000095"  Text="{{0:LM 12}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000096_R-%TT%00009601" RefId="%AID%_O-%TT%000096"  Text="{{0:LM 12}}: Sperre" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000097_R-%TT%00009701" RefId="%AID%_O-%TT%000097"  Text="{{0:LM 12}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000098_R-%TT%00009801" RefId="%AID%_O-%TT%000098"  Text="{{0:LM 12}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000099_R-%TT%00009901" RefId="%AID%_O-%TT%000099"  Text="{{0:LM 12}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000100_R-%TT%00010001" RefId="%AID%_O-%TT%000100"  Text="{{0:LM 12}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000101_R-%TT%00010101" RefId="%AID%_O-%TT%000101"  Text="{{0:LM 12}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%120100_R-%TT%12010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000102_R-%TT%00010201" RefId="%AID%_O-%TT%000102"  Text="{{0:LM 13}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000103_R-%TT%00010301" RefId="%AID%_O-%TT%000103"  Text="{{0:LM 13}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000104_R-%TT%00010401" RefId="%AID%_O-%TT%000104"  Text="{{0:LM 13}}: Sperre" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000105_R-%TT%00010501" RefId="%AID%_O-%TT%000105"  Text="{{0:LM 13}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000106_R-%TT%00010601" RefId="%AID%_O-%TT%000106"  Text="{{0:LM 13}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000107_R-%TT%00010701" RefId="%AID%_O-%TT%000107"  Text="{{0:LM 13}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000108_R-%TT%00010801" RefId="%AID%_O-%TT%000108"  Text="{{0:LM 13}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000109_R-%TT%00010901" RefId="%AID%_O-%TT%000109"  Text="{{0:LM 13}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%130100_R-%TT%13010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000110_R-%TT%00011001" RefId="%AID%_O-%TT%000110"  Text="{{0:LM 14}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000111_R-%TT%00011101" RefId="%AID%_O-%TT%000111"  Text="{{0:LM 14}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000112_R-%TT%00011201" RefId="%AID%_O-%TT%000112"  Text="{{0:LM 14}}: Sperre" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000113_R-%TT%00011301" RefId="%AID%_O-%TT%000113"  Text="{{0:LM 14}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000114_R-%TT%00011401" RefId="%AID%_O-%TT%000114"  Text="{{0:LM 14}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000115_R-%TT%00011501" RefId="%AID%_O-%TT%000115"  Text="{{0:LM 14}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000116_R-%TT%00011601" RefId="%AID%_O-%TT%000116"  Text="{{0:LM 14}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000117_R-%TT%00011701" RefId="%AID%_O-%TT%000117"  Text="{{0:LM 14}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%140100_R-%TT%14010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000118_R-%TT%00011801" RefId="%AID%_O-%TT%000118"  Text="{{0:LM 15}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000119_R-%TT%00011901" RefId="%AID%_O-%TT%000119"  Text="{{0:LM 15}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000120_R-%TT%00012001" RefId="%AID%_O-%TT%000120"  Text="{{0:LM 15}}: Sperre" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000121_R-%TT%00012101" RefId="%AID%_O-%TT%000121"  Text="{{0:LM 15}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000122_R-%TT%00012201" RefId="%AID%_O-%TT%000122"  Text="{{0:LM 15}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000123_R-%TT%00012301" RefId="%AID%_O-%TT%000123"  Text="{{0:LM 15}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000124_R-%TT%00012401" RefId="%AID%_O-%TT%000124"  Text="{{0:LM 15}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000125_R-%TT%00012501" RefId="%AID%_O-%TT%000125"  Text="{{0:LM 15}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%150100_R-%TT%15010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000126_R-%TT%00012601" RefId="%AID%_O-%TT%000126"  Text="{{0:LM 16}}: Status-Soll-Helligkeit" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000127_R-%TT%00012701" RefId="%AID%_O-%TT%000127"  Text="{{0:LM 16}}: Status-Soll-Farbtemperatur" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000128_R-%TT%00012801" RefId="%AID%_O-%TT%000128"  Text="{{0:LM 16}}: Sperre" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000129_R-%TT%00012901" RefId="%AID%_O-%TT%000129"  Text="{{0:LM 16}}: Status Sperre" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000130_R-%TT%00013001" RefId="%AID%_O-%TT%000130"  Text="{{0:LM 16}}: Sommer aktiv" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000131_R-%TT%00013101" RefId="%AID%_O-%TT%000131"  Text="{{0:LM 16}}: Umgebungslicht (Lux)" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000132_R-%TT%00013201" RefId="%AID%_O-%TT%000132"  Text="{{0:LM 16}}: Tag/Nacht" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
+              <ComObjectRef Id="%AID%_O-%TT%000133_R-%TT%00013301" RefId="%AID%_O-%TT%000133"  Text="{{0:LM 16}}: Adaptive Helligkeit aktiv" TextParameterRefId="%AID%_P-%TT%160100_R-%TT%16010001" />
             </ComObjectRefs>
 
           </Static>
