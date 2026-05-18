@@ -13,23 +13,14 @@ die zentrale Master-Auswahl wiederverwendet.
 
 ## 1. Architektur in Kürze
 
-```
-+--------------------+        IMasterProvider         +--------------------------+
-|  LightManagerModule|<-------------------------------| HCL::MasterManager       |
-|  (ChannelOwner,    |  providerMasterCount()         |   (stateless facade,     |
-|   speichert je     |  providerGetMaster(n)          |    globales Singleton    |
-|   Channel einen    |  providerGetCurrentValue(n)    |    HCL::masterManager)   |
-|   HCL::Master)     |  providerIsMasterApplyBlocked  +-----------+--------------+
-+--------------------+                                            |
-                                                                  |  read-only
-                                                                  v
-                                                  +----------------------------+
-                                                  | Consumer-OAM               |
-                                                  |  (HueGateway, DALI, ...)   |
-                                                  |  liest getMaster(),        |
-                                                  |  getCurrentValue(),        |
-                                                  |  isApplyBlocked()...       |
-                                                  +----------------------------+
+```mermaid
+graph TD
+    LM["LightManagerModule\n(speichert je Channel einen HCL::Master)"]
+    MM["HCL::MasterManager\n(stateless Singleton: HCL::masterManager)"]
+    CO["Consumer-OAM\n(HueGateway, DALI, MQTT, ...)"]
+
+    LM -->|"implements IMasterProvider\nproviderMasterCount()\nproviderGetMaster(n)\nproviderGetCurrentValue(n)\nproviderIsMasterApplyBlocked(n)"| MM
+    MM -->|"read-only\ngetMasterCount()\ngetCurrentValue(n)\nisMasterApplyBlocked(n)"| CO
 ```
 
 - Per-Channel-State (Master-Konfiguration, gecachter Interpolationswert,
