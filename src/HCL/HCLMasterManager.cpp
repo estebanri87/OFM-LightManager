@@ -25,6 +25,9 @@ void MasterManager::setup() {
 void MasterManager::loop(uint16_t currentTimeMinutes, int16_t dayOfYear) {
     if (!_enabled) return;
     if (_provider == nullptr) return;
+    // Sentinel: caller signals "no valid time" via dayOfYear=-1. Recalculating
+    // with currentTimeMinutes=0 would falsely apply the SP1 setpoint.
+    if (dayOfYear < 0) return;
 
     uint32_t now = millis();
     if ((now - _lastUpdateMs) >= _updateIntervalMs

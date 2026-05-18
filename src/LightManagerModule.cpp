@@ -109,7 +109,11 @@ void LightManagerModule::loop()
     for (auto& ch : _channels)
         ch->loopHcl(hasTime ? &timeinfo : nullptr, hasTime);
 
-    HCL::masterManager.loop(timeMinutes, dayOfYear);
+    // Skip HCL value recalculation when no valid time is available; otherwise
+    // a momentary getLocalTime()==false would feed timeMinutes=0/dayOfYear=-1
+    // into the master and cause the published value to jump to the SP1 setpoint.
+    if (hasTime)
+        HCL::masterManager.loop(timeMinutes, dayOfYear);
 
     evaluateHclLockFallback(hasTime ? &timeinfo : nullptr, hasTime);
 
