@@ -8,7 +8,7 @@ Globale Sperre inkl. Statusrückmeldung.
 #### Entsperren Trigger
 1-Bit Triggerobjekt zum gleichzeitigen Aufheben aller globalen, manager-spezifischen und kanal-spezifischen Sperren.
 
-#### Sperre Lichtmanager 1..16 / Status
+#### Sperre Lichtmanager 1..N / Status
 Lichtmanager-spezifische Sperrobjekte inkl. Statusrückmeldung.
 Sichtbarkeit abhängig von der konfigurierten Anzahl Lichtmanager.
 

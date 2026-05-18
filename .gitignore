@@ -10,3 +10,4 @@ __pycache__
 .gcc-flags.json
 platformio.ini.user
 src/LightManagerModule.share.xml.bak
+To-Do.md

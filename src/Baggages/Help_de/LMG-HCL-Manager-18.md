@@ -1,6 +1,6 @@
 ﻿### HCL-Manager-18
 
-Jeder Lichtmanager 1..16 besitzt identischen Aufbau (HCL-Konfiguration):
+Jeder Lichtmanager 1..N besitzt identischen Aufbau (HCL-Konfiguration):
 
 - **Bezeichnung**: Freie ETS-Bezeichnung des Lichtmanagers.
 - **Lichtmanager Sperre (spezifisch)**: Sperrt nur den jeweiligen Manager.

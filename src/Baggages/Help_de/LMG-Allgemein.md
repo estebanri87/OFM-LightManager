@@ -9,6 +9,6 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 `Stützpunkte / Astro / Sensor` → `OFM-LightManager` → `Status-KOs / Konsumenten-Modul`
 
 **Wichtig:**
-- Das Modul stellt nur Sollwerte bereit. Die eigentliche Ausgabe an Leuchten erfolgt in den jeweiligen Konsumenten-Modulen (z. B. Hue-Kanäle).
+- Das Modul stellt nur Sollwerte bereit. Die eigentliche Ausgabe an Leuchten erfolgt in den jeweiligen Ziel-Modulen oder GA´s.
 - Parameter und KOs müssen in ETS konsistent projektiert werden.
 - Logikfunktionen (Saison-Logik, Zentralfunktionen) können in dedizierten Logikmodulen umgesetzt werden.

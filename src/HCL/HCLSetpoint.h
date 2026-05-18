@@ -22,21 +22,7 @@ struct Setpoint {
      */
     Setpoint(uint16_t time, uint16_t k, uint8_t b)
         : timeMinutes(time), kelvin(k), brightness(b) {}
-    
-    /**
-     * @brief Parse time string "HH:MM" to minutes
-     * @param timeStr Time string in format "HH:MM"
-     * @return Minutes since midnight, or 0xFFFF on error
-     */
-    static uint16_t parseTime(const char* timeStr);
-    
-    /**
-     * @brief Format minutes to time string "HH:MM"
-     * @param minutes Minutes since midnight
-     * @param buffer Output buffer (min 6 bytes)
-     */
-    static void formatTime(uint16_t minutes, char* buffer);
-    
+
     /**
      * @brief Check if setpoint is valid
      */

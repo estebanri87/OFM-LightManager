@@ -1,13 +1,15 @@
 #pragma once
 
 #include <Arduino.h>
+#include <memory>
 #include <time.h>
 #include <vector>
 #include "OpenKNX.h"
 #include "HCL/HCLMasterManager.h"
 #include "ILightManagerOutput.h"
+#include "LightManagerChannel.h"
 
-class LightManagerModule : public OpenKNX::Module
+class LightManagerModule : public OpenKNX::Module, public HCL::IMasterProvider
 {
 public:
     enum class HclLockFallbackMode : uint8_t {
@@ -53,9 +55,18 @@ public:
     void unregisterOutput(ILightManagerOutput* target);
     void notifyOutputActive(uint8_t masterNum, bool active);
 
-    // Public for use by HueGatewayModule during migration (Phase 4)
+    // Public API used by HueGatewayModule
     void setHclLock(bool active, const char* reason);
     void setHclManagerLock(uint8_t managerNumber, bool active, const char* reason);
+
+    // --- HCL::IMasterProvider implementation -------------------------------
+    uint8_t           providerMasterCount() const override { return static_cast<uint8_t>(_channels.size()); }
+    HCL::Master*      providerGetMaster(uint8_t masterNum) override;
+    HCL::InterpolatedValue providerGetCurrentValue(uint8_t masterNum) const override;
+    void              providerSetCurrentValue(uint8_t masterNum, const HCL::InterpolatedValue& value) override;
+    bool              providerIsMasterApplyBlocked(uint8_t masterNum) const override;
+    void              providerSetMasterApplyBlocked(uint8_t masterNum, bool blocked) override;
+    bool              providerIsMasterAdaptiveActive(uint8_t masterNum, uint16_t currentTimeMinutes, uint32_t nowMs) const override;
 
 private:
     struct OutputRegistration {
@@ -64,42 +75,21 @@ private:
     };
 
     std::vector<OutputRegistration> _outputs;
+    std::vector<std::unique_ptr<LightManagerChannel>> _channels;
 
-    // Per-master push state
-    HCL::InterpolatedValue _lastPushedValues[HCL::MasterManager::MAX_MASTERS];
-    bool _lastBlockedState[HCL::MasterManager::MAX_MASTERS];
-
-    // Global HCL lock state
-    bool     _hclLockActive;
-    uint8_t  _hclLockFallbackMode;
-    uint8_t  _hclFallbackPolicy;
-    uint32_t _hclFallbackDurationMs;
-    uint16_t _hclFallbackReleaseMinuteOfDay;
-    unsigned long _hclLockActivatedMs;
-    unsigned long _hclLockAutoReleaseMs;
-    int16_t  _hclLockActivationDayOfYear;
-    int16_t  _hclLockActivationMinuteOfDay;
-
-    // Per-master HCL lock state
-    bool          _hclManagerLockActive[HCL::MasterManager::MAX_MASTERS];
-    uint8_t       _hclManagerLockFallbackMode[HCL::MasterManager::MAX_MASTERS];
-    uint8_t       _hclManagerFallbackPolicy[HCL::MasterManager::MAX_MASTERS];
-    uint32_t      _hclManagerFallbackDurationMs[HCL::MasterManager::MAX_MASTERS];
-    uint16_t      _hclManagerFallbackReleaseMinuteOfDay[HCL::MasterManager::MAX_MASTERS];
-    unsigned long _hclManagerLockActivatedMs[HCL::MasterManager::MAX_MASTERS];
-    unsigned long _hclManagerLockAutoReleaseMs[HCL::MasterManager::MAX_MASTERS];
-    int16_t       _hclManagerLockActivationDayOfYear[HCL::MasterManager::MAX_MASTERS];
-    int16_t       _hclManagerLockActivationMinuteOfDay[HCL::MasterManager::MAX_MASTERS];
-
-    void pushToOutputs(uint8_t masterNum, const HCL::InterpolatedValue& value);
-    void setupHclFromParams();
+    // Global HCL lock state (KO 400/401/402 — affects all masters)
+    bool          _hclLockActive            = false;
+    uint8_t       _hclLockFallbackMode      = 0;
+    uint8_t       _hclFallbackPolicy        = 0;
+    uint32_t      _hclFallbackDurationMs    = 0;
+    uint16_t      _hclFallbackReleaseMinuteOfDay = 0xFFFF;
+    unsigned long _hclLockActivatedMs       = 0;
+    unsigned long _hclLockAutoReleaseMs     = 0;
+    int16_t       _hclLockActivationDayOfYear = -1;
+    int16_t       _hclLockActivationMinuteOfDay = -1;
 
     void publishHclLockStatus();
-    void publishHclManagerLockStatus(uint8_t managerNumber);
-
     void evaluateHclLockFallback(const tm* timeinfo, bool hasTime);
-    void evaluateHclManagerLockFallback(const tm* timeinfo, bool hasTime);
-
     uint32_t getHclFallbackDurationMs(HclLockFallbackMode mode) const;
     bool shouldReleaseByPolicyTime(int16_t activationDayOfYear, int16_t activationMinuteOfDay,
                                    uint16_t releaseMinuteOfDay, const tm* timeinfo, bool hasTime) const;
