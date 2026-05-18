@@ -494,7 +494,7 @@
                                                 <ParameterRefRef RefId="%AID%_P-%TT%%CC%091_R-%TT%%CC%09101" IndentLevel="1" />
                                                 <ParameterRefRef RefId="%AID%_P-%TT%%CC%090_R-%TT%%CC%09001" IndentLevel="1" />
                                               </when>
-                                              <when test="3"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%004_R-%TT%%CC%00401" HelpContext="LMG-HCL-Saison-KO" /></when>
+                                              <when test="3"><ComObjectRefRef RefId="%AID%_O-%TT%%CC%004_R-%TT%%CC%00401" /></when>
                                             </choose>
                                             <ParameterSeparator Id="%AID%_PS-CH%CC%SPLine" Text="" UIHint="HorizontalRuler" />
                                             <ParameterSeparator Id="%AID%_PS-CH%CC%SPTitle" Text="Stützpunkte" UIHint="Headline" />
@@ -659,7 +659,7 @@
                                           </when>
                                         </choose>
                                         <ParameterSeparator Id="%AID%_PS-CH%CC%AdaptiveLine" Text="" UIHint="HorizontalRuler" />
-                                        <ParameterSeparator Id="%AID%_PS-CH%CC%AdaptiveTitle" Text="Adaptive Helligkeit" UIHint="Headline" HelpContext="LMG-HCL-Adaptive-Helligkeit" />
+                                        <ParameterSeparator Id="%AID%_PS-CH%CC%AdaptiveTitle" Text="Adaptive Helligkeit" UIHint="Headline" />
                                         <ParameterRefRef RefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001" HelpContext="LMG-HCL-Adaptive-Modus" />
                                         <choose ParamRefId="%AID%_P-%TT%%CC%010_R-%TT%%CC%01001">
                                           <when test="!=0">
@@ -690,9 +690,9 @@
                                             <ParameterRefRef RefId="%AID%_P-%TT%%CC%008_R-%TT%%CC%00801" HelpContext="LMG-HCL-Adaptive-Mindesthelligkeit" />
                                             <ParameterRefRef RefId="%AID%_P-%TT%%CC%011_R-%TT%%CC%01101" HelpContext="LMG-HCL-Adaptive-Timeout" />
                                             <ParameterRefRef RefId="%AID%_P-%TT%%CC%009_R-%TT%%CC%00901" HelpContext="LMG-HCL-Adaptive-Mindestschritt" />
-                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%005_R-%TT%%CC%00501" HelpContext="LMG-HCL-Adaptive-KOs" />
-                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%006_R-%TT%%CC%00601" HelpContext="LMG-HCL-Adaptive-KOs" />
-                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%007_R-%TT%%CC%00701" HelpContext="LMG-HCL-Adaptive-KOs" />
+                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%005_R-%TT%%CC%00501" />
+                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%006_R-%TT%%CC%00601" />
+                                            <ComObjectRefRef RefId="%AID%_O-%TT%%CC%007_R-%TT%%CC%00701" />
                                           </when>
                                         </choose>
                                       </ParameterBlock>

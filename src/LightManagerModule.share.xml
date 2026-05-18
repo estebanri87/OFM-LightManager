@@ -280,19 +280,19 @@
                 <ParameterSeparator Id="%AID%_PS-LMGHead" Text="Lichtmanager" UIHint="Headline" />
                 <ParameterSeparator Id="%AID%_PS-LMGVer" Text="Version: %ModuleVersion%" />
                 <ParameterSeparator Id="%AID%_PS-LMGRule1" Text="" UIHint="HorizontalRuler" />
-                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Kanalauswahl" UIHint="Headline" HelpContext="LMG-Lichtmanager" />
+                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Kanalauswahl" UIHint="Headline" />
                 <ParameterRefRef RefId="%AID%_P-%TT%00010_R-%TT%0001001" HelpContext="LMG-Lichtmanager" />
                 <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
                   <when test="1">
                     <ParameterRefRef RefId="%AID%_P-%TT%00011_R-%TT%0001101" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
 
                     <ParameterSeparator Id="%AID%_PS-LMGRule2" Text="" UIHint="HorizontalRuler" />
-                    <ParameterSeparator Id="%AID%_PS-LMGSettings" Text="Einstellungen" UIHint="Headline" HelpContext="LMG-Lichtmanager" />
+                    <ParameterSeparator Id="%AID%_PS-LMGSettings" Text="Einstellungen" UIHint="Headline" />
                     <ParameterRefRef RefId="%AID%_P-%TT%00012_R-%TT%0001201" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
                     <ParameterRefRef RefId="%AID%_P-%TT%00013_R-%TT%0001301" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
 
                     <ParameterSeparator Id="%AID%_PS-LMGHCLLockLine" Text="" UIHint="HorizontalRuler" />
-                    <ParameterSeparator Id="%AID%_PS-LMGHCLLockHead" Text="Lichtmanager Sperre (global)" UIHint="Headline" HelpContext="LMG-HCL-Sperre-global" />
+                    <ParameterSeparator Id="%AID%_PS-LMGHCLLockHead" Text="Lichtmanager Sperre (global)" UIHint="Headline" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00003_R-%TT%0000301" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00004_R-%TT%0000401" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00037_R-%TT%0003701" />
@@ -315,7 +315,7 @@
               <!-- erfolgt im templ.xml via choose(LMGHCLMasterCount >= %C%) -->
               <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
                 <when test="1">
-                  <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock" type="template" prefix="LMG" IsInner="true" />
+                  <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="LMG" IsInner="true" />
                 </when>
               </choose>
 
