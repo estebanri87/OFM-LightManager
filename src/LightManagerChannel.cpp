@@ -250,9 +250,7 @@ void LightManagerChannel::updateSeason(const tm* timeinfo)
 
 void LightManagerChannel::pushIfChanged()
 {
-    const uint8_t mn = masterNumber();
-    const bool blocked = HCL::masterManager.isApplyBlocked() ||
-                         HCL::masterManager.isMasterApplyBlocked(mn);
+    const bool blocked = HCL::masterManager.isApplyBlocked() || _applyBlocked;
 
     if (blocked)
     {
@@ -263,7 +261,7 @@ void LightManagerChannel::pushIfChanged()
     const bool wasBlocked = _lastBlocked;
     _lastBlocked = false;
 
-    const HCL::InterpolatedValue val = HCL::masterManager.getCurrentValue(mn);
+    const HCL::InterpolatedValue val = _currentValue;
     if (!wasBlocked &&
         val.kelvin == _lastPushedValue.kelvin &&
         val.brightness == _lastPushedValue.brightness)
@@ -302,13 +300,14 @@ bool LightManagerChannel::processChannelKo(GroupObject& ko, uint16_t channelKoIn
         case LMG_KoCHAmbientLux:
         {
             const float lux = ko.value(Dpt(9, 4));
-            HCL::masterManager.setMasterAmbientLux(masterNumber(), lux);
+            _master.setAmbientLux(lux);
+            HCL::masterManager.forceUpdate();
             publishAdaptiveActive();
             return true;
         }
 
         case LMG_KoCHDayNight:
-            HCL::masterManager.setMasterDaytime(masterNumber(), ko.value(Dpt(1, 1)));
+            _master.setDaytime(ko.value(Dpt(1, 1)));
             return true;
 
         default:
@@ -324,7 +323,7 @@ void LightManagerChannel::setLock(bool active, const char* reason)
 {
     const bool changed = (_lockActive != active);
     _lockActive = active;
-    HCL::masterManager.setMasterApplyBlocked(masterNumber(), active);
+    _applyBlocked = active;
 
     if (active)
     {
@@ -457,7 +456,7 @@ void LightManagerChannel::publishAdaptiveActive()
 
 bool LightManagerChannel::isSummer() const
 {
-    HCL::Master* m = master();
+    const HCL::Master* m = master();
     return m && m->isSummer();
 }
 

@@ -6,153 +6,110 @@
 namespace HCL {
 
 /**
- * @brief Manages up to 16 HCL Masters and provides continuous updates
- * 
- * This class:
- * - Manages up to 16 HCL Master instances
- * - Calculates current values based on time
- * - Provides continuous fade updates for lights
- * - Handles immediate switch-on with correct HCL values
+ * @brief Provider interface implemented by the owner of HCL::Master instances
+ *        (typically `LightManagerModule`). Allows the stateless
+ *        MasterManager facade to look up channel-hosted masters by number.
+ *
+ *        Master numbers passed across the interface are 1-based (1..N).
+ */
+class IMasterProvider {
+public:
+    virtual ~IMasterProvider() = default;
+
+    /** Number of configured masters (0..MAX_MASTERS). */
+    virtual uint8_t providerMasterCount() const = 0;
+
+    /** Lookup a master by 1-based number. Returns nullptr if out-of-range. */
+    virtual Master* providerGetMaster(uint8_t masterNum) = 0;
+
+    /** Last interpolated value for a master (cached in the channel). */
+    virtual InterpolatedValue providerGetCurrentValue(uint8_t masterNum) const = 0;
+
+    /** Update the cached interpolated value for a master. */
+    virtual void providerSetCurrentValue(uint8_t masterNum, const InterpolatedValue& value) = 0;
+
+    /** Per-master apply-blocked flag (HCL output suppressed). */
+    virtual bool providerIsMasterApplyBlocked(uint8_t masterNum) const = 0;
+    virtual void providerSetMasterApplyBlocked(uint8_t masterNum, bool blocked) = 0;
+
+    /** Is the adaptive brightness curve currently active for this master? */
+    virtual bool providerIsMasterAdaptiveActive(uint8_t masterNum, uint16_t currentTimeMinutes, uint32_t nowMs) const = 0;
+};
+
+/**
+ * @brief Stateless facade over channel-hosted HCL::Master instances.
+ *
+ * The MasterManager itself no longer stores Master objects — those live
+ * inside `LightManagerChannel`. The manager keeps only global runtime state
+ * (enable/apply-blocked, update interval, fade duration, scheduling clock)
+ * and delegates all per-master accesses to the registered `IMasterProvider`.
+ *
+ * When no provider is registered, all per-master lookups return safe
+ * defaults (nullptr / zero / false).
  */
 class MasterManager {
 public:
     static constexpr uint8_t MAX_MASTERS = 16;
-    
-    /**
-     * @brief Constructor
-     */
+
     MasterManager();
-    
-    /**
-     * @brief Initialize the manager
-     */
+
+    /** Register the channel-owning module as master provider. */
+    void setProvider(IMasterProvider* provider) { _provider = provider; }
+
+    /** Reset internal scheduling clocks. */
     void setup();
-    
-    /**
-     * @brief Update loop - call regularly (e.g. every second)
-     * @param currentTimeMinutes Current time in minutes since midnight
-     */
+
+    /** Periodic update — recalculate cached values when time advances. */
     void loop(uint16_t currentTimeMinutes, int16_t dayOfYear = -1);
-    
-    /**
-    * @brief Get a HCL Master by index (1-16)
-    * @param masterNum Master number (1-16)
-     * @return Pointer to master or nullptr if invalid
-     */
+
     Master* getMaster(uint8_t masterNum);
-    
-    /**
-     * @brief Get current interpolated value for a master
-    * @param masterNum Master number (1-16)
-     * @return Current interpolated value
-     */
     InterpolatedValue getCurrentValue(uint8_t masterNum) const;
-    
-    /**
-     * @brief Check if HCL is enabled globally
-     */
+
     bool isEnabled() const { return _enabled; }
-    
-    /**
-     * @brief Enable or disable HCL
-     */
     void setEnabled(bool enabled) { _enabled = enabled; }
 
-    /**
-     * @brief Set number of configured masters (1..MAX_MASTERS).
-     *
-     * Should be called by the LightManager during setup based on the ETS
-     * `LMGHCLMasterCount` parameter. Consumers (e.g. HueGateway) use
-     * `getMasterCount()` to iterate only over configured masters.
-     */
-    void setMasterCount(uint8_t count) { _masterCount = (count > MAX_MASTERS) ? MAX_MASTERS : count; }
+    /** Number of configured masters — delegated to provider (0 if none). */
+    uint8_t getMasterCount() const { return _provider ? _provider->providerMasterCount() : 0; }
 
-    /**
-     * @brief Get number of configured masters (0..MAX_MASTERS).
-     */
-    uint8_t getMasterCount() const { return _masterCount; }
-
-    /**
-     * @brief Block or allow applying HCL values to lights.
-     *
-     * When blocked, the manager still keeps calculating current values
-     * but channel light loops can skip applying them.
-     */
+    /** Global apply-block (affects all masters). */
     void setApplyBlocked(bool blocked) { _applyBlocked = blocked; }
-
-    /**
-     * @brief Returns whether applying HCL values is currently blocked.
-     */
     bool isApplyBlocked() const { return _applyBlocked; }
 
-    /**
-     * @brief Block or allow applying HCL values for a specific master.
-    * @param masterNum Master number (1-16)
-     * @param blocked True to block HCL apply for this master
-     */
+    /** Per-master apply-block — delegated to provider. */
     void setMasterApplyBlocked(uint8_t masterNum, bool blocked);
-
-    /**
-     * @brief Returns whether applying HCL values is blocked for a specific master.
-    * @param masterNum Master number (1-16)
-     */
     bool isMasterApplyBlocked(uint8_t masterNum) const;
-    
-    /**
-     * @brief Set update interval in seconds
-     */
+
+    /** Last calculated time-of-day in minutes (or 0xFFFF before first loop). */
+    uint16_t getLastTimeMinutes() const { return _lastTimeMinutes; }
+
     void setUpdateInterval(uint16_t seconds) { _updateIntervalMs = seconds * 1000; }
-    
-    /**
-     * @brief Get update interval in seconds
-     */
     uint16_t getUpdateInterval() const { return _updateIntervalMs / 1000; }
-    
-    /**
-     * @brief Set fade duration in seconds
-     */
+
     void setFadeDuration(uint8_t seconds) { _fadeDurationSec = seconds; }
-    
-    /**
-     * @brief Get fade duration in seconds
-     */
     uint8_t getFadeDuration() const { return _fadeDurationSec; }
-    
-    /**
-     * @brief Force immediate recalculation of all values
-     */
+
     void forceUpdate();
-    
-    /**
-     * @brief Get time until next update in milliseconds
-     */
     uint32_t getTimeUntilNextUpdate() const;
 
-    // --- Adaptive Helligkeit ---
+    // --- Adaptive Helligkeit (delegating to master via provider) ---
     void setMasterAmbientLux(uint8_t masterNum, float lux);
     void setMasterDaytime(uint8_t masterNum, bool isDaytime);
     bool isMasterAdaptiveActive(uint8_t masterNum) const;
-    
+
 private:
-    Master _masters[MAX_MASTERS];
-    InterpolatedValue _currentValues[MAX_MASTERS];
+    IMasterProvider* _provider = nullptr;
     bool _enabled;
     bool _applyBlocked;
-    bool _masterApplyBlocked[MAX_MASTERS];
-    uint8_t _masterCount;        // Configured masters (0..MAX_MASTERS), set by LightManager
-    uint16_t _updateIntervalMs;  // Update interval in milliseconds
-    uint8_t _fadeDurationSec;    // Fade duration in seconds
-    uint32_t _lastUpdateMs;      // Last update timestamp
-    uint16_t _lastTimeMinutes;   // Last calculated time
-    int16_t _lastDayOfYear;      // Last day-of-year used for calculation
-    
-    /**
-     * @brief Update all current values
-     */
+    uint16_t _updateIntervalMs;
+    uint8_t _fadeDurationSec;
+    uint32_t _lastUpdateMs;
+    uint16_t _lastTimeMinutes;
+    int16_t _lastDayOfYear;
+
     void updateCurrentValues(uint16_t currentTimeMinutes, int16_t dayOfYear);
 };
 
-// Global instance
+// Global facade instance (no static-init order traps — holds no Master state).
 extern MasterManager masterManager;
 
 } // namespace HCL

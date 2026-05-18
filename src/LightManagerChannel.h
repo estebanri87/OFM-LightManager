@@ -66,8 +66,20 @@ public:
     /** Force re-push of status on next pushIfChanged(). */
     void invalidatePushedState() { _lastBlocked = true; }
 
+    // --- IMasterProvider backing storage (LightManagerModule routes here) ---
+    HCL::Master* masterPtr() { return &_master; }
+    HCL::InterpolatedValue currentValue() const { return _currentValue; }
+    void setCurrentValue(const HCL::InterpolatedValue& v) { _currentValue = v; }
+    bool applyBlocked() const { return _applyBlocked; }
+    void setApplyBlocked(bool blocked) { _applyBlocked = blocked; }
+    bool isAdaptiveActive(uint16_t currentTimeMinutes, uint32_t nowMs) const
+    {
+        return _master.isAdaptiveCurrentlyActive(currentTimeMinutes, nowMs);
+    }
+
 private:
-    HCL::Master* master() const { return HCL::masterManager.getMaster(masterNumber()); }
+    HCL::Master* master() { return &_master; }
+    const HCL::Master* master() const { return &_master; }
 
     // Setup helpers
     void loadSetpoints();
@@ -96,4 +108,9 @@ private:
     // Push state
     HCL::InterpolatedValue _lastPushedValue;
     bool _lastBlocked = false;
+
+    // Channel-owned HCL state (replaces former MasterManager-internal arrays).
+    HCL::Master            _master;
+    HCL::InterpolatedValue _currentValue;
+    bool                   _applyBlocked = false;
 };

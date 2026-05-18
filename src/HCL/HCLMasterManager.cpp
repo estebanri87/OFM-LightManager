@@ -2,129 +2,100 @@
 
 namespace HCL {
 
-// Global instance
+// Global facade instance (stateless w.r.t. masters)
 MasterManager masterManager;
 
 MasterManager::MasterManager()
     : _enabled(false)
     , _applyBlocked(false)
-    , _masterCount(0)
-    , _updateIntervalMs(60000)  // Default: 60 seconds
-    , _fadeDurationSec(5)       // Default: 5 seconds
+    , _updateIntervalMs(60000)
+    , _fadeDurationSec(5)
     , _lastUpdateMs(0)
     , _lastTimeMinutes(0xFFFF)
     , _lastDayOfYear(-1)
 {
-    // Initialize current values to defaults
-    for (uint8_t i = 0; i < MAX_MASTERS; i++) {
-        _currentValues[i] = InterpolatedValue(4000, 100);
-        _masterApplyBlocked[i] = false;
-    }
 }
 
 void MasterManager::setup() {
     _lastUpdateMs = millis();
-    _lastTimeMinutes = 0xFFFF;  // Force initial update
+    _lastTimeMinutes = 0xFFFF;
     _lastDayOfYear = -1;
 }
 
 void MasterManager::loop(uint16_t currentTimeMinutes, int16_t dayOfYear) {
-    if (!_enabled) {
-        return;
-    }
-    
+    if (!_enabled) return;
+    if (_provider == nullptr) return;
+
     uint32_t now = millis();
-    
-    // Check if it's time to update
-    if ((now - _lastUpdateMs) >= _updateIntervalMs || _lastTimeMinutes != currentTimeMinutes || _lastDayOfYear != dayOfYear) {
+    if ((now - _lastUpdateMs) >= _updateIntervalMs
+        || _lastTimeMinutes != currentTimeMinutes
+        || _lastDayOfYear   != dayOfYear)
+    {
         updateCurrentValues(currentTimeMinutes, dayOfYear);
-        _lastUpdateMs = now;
+        _lastUpdateMs    = now;
         _lastTimeMinutes = currentTimeMinutes;
-        _lastDayOfYear = dayOfYear;
+        _lastDayOfYear   = dayOfYear;
     }
 }
 
 Master* MasterManager::getMaster(uint8_t masterNum) {
-    if (masterNum < 1 || masterNum > MAX_MASTERS) {
-        return nullptr;
-    }
-    
-    return &_masters[masterNum - 1];
+    return _provider ? _provider->providerGetMaster(masterNum) : nullptr;
 }
 
 InterpolatedValue MasterManager::getCurrentValue(uint8_t masterNum) const {
-    if (masterNum < 1 || masterNum > MAX_MASTERS) {
-        return InterpolatedValue();  // Return default
-    }
-    
-    return _currentValues[masterNum - 1];
+    if (_provider == nullptr) return InterpolatedValue();
+    return _provider->providerGetCurrentValue(masterNum);
 }
 
-void MasterManager::setMasterApplyBlocked(uint8_t masterNum, bool blocked)
-{
-    if (masterNum < 1 || masterNum > MAX_MASTERS)
-    {
-        return;
-    }
-
-    _masterApplyBlocked[masterNum - 1] = blocked;
+void MasterManager::setMasterApplyBlocked(uint8_t masterNum, bool blocked) {
+    if (_provider) _provider->providerSetMasterApplyBlocked(masterNum, blocked);
 }
 
-bool MasterManager::isMasterApplyBlocked(uint8_t masterNum) const
-{
-    if (masterNum < 1 || masterNum > MAX_MASTERS)
-    {
-        return false;
-    }
-
-    return _masterApplyBlocked[masterNum - 1];
+bool MasterManager::isMasterApplyBlocked(uint8_t masterNum) const {
+    return _provider ? _provider->providerIsMasterApplyBlocked(masterNum) : false;
 }
 
 void MasterManager::forceUpdate() {
-    _lastUpdateMs = 0;  // Force next loop() call to update
+    _lastUpdateMs = 0;
 }
 
 uint32_t MasterManager::getTimeUntilNextUpdate() const {
     uint32_t now = millis();
     uint32_t elapsed = now - _lastUpdateMs;
-    
-    if (elapsed >= _updateIntervalMs) {
-        return 0;
-    }
-    
-    return _updateIntervalMs - elapsed;
+    return (elapsed >= _updateIntervalMs) ? 0 : (_updateIntervalMs - elapsed);
 }
 
 void MasterManager::updateCurrentValues(uint16_t currentTimeMinutes, int16_t dayOfYear) {
+    if (_provider == nullptr) return;
+    const uint8_t count = _provider->providerMasterCount();
     uint32_t now = millis();
-    for (uint8_t i = 0; i < MAX_MASTERS; i++) {
-        if (_masters[i].isValid()) {
-            _currentValues[i] = _masters[i].calculateValue(currentTimeMinutes, now, dayOfYear);
-            
-            #ifdef DEBUG_HCL
-            Serial.printf("[HCL] Master %d: %dK, %d%%\n", 
-                i + 1, _currentValues[i].kelvin, _currentValues[i].brightness);
-            #endif
-        }
+    for (uint8_t i = 1; i <= count; i++) {
+        Master* m = _provider->providerGetMaster(i);
+        if (m == nullptr || !m->isValid()) continue;
+        InterpolatedValue val = m->calculateValue(currentTimeMinutes, now, dayOfYear);
+        _provider->providerSetCurrentValue(i, val);
+        #ifdef DEBUG_HCL
+        Serial.printf("[HCL] Master %d: %dK, %d%%\n", i, val.kelvin, val.brightness);
+        #endif
     }
 }
 
 void MasterManager::setMasterAmbientLux(uint8_t masterNum, float lux) {
-    if (masterNum < 1 || masterNum > MAX_MASTERS) return;
-    _masters[masterNum - 1].setAmbientLux(lux);
+    Master* m = getMaster(masterNum);
+    if (m == nullptr) return;
+    m->setAmbientLux(lux);
     forceUpdate();
 }
 
 void MasterManager::setMasterDaytime(uint8_t masterNum, bool isDaytime) {
-    if (masterNum < 1 || masterNum > MAX_MASTERS) return;
-    _masters[masterNum - 1].setDaytime(isDaytime);
+    Master* m = getMaster(masterNum);
+    if (m == nullptr) return;
+    m->setDaytime(isDaytime);
 }
 
 bool MasterManager::isMasterAdaptiveActive(uint8_t masterNum) const {
-    if (masterNum < 1 || masterNum > MAX_MASTERS) return false;
-    uint32_t now = millis();
-    // Aktuelle Uhrzeit nicht vorhanden ÔåÆ konservativ aus _lastTimeMinutes lesen
-    return _masters[masterNum - 1].isAdaptiveCurrentlyActive(_lastTimeMinutes, now);
+    if (_provider == nullptr) return false;
+    return _provider->providerIsMasterAdaptiveActive(masterNum, _lastTimeMinutes, millis());
 }
 
 } // namespace HCL

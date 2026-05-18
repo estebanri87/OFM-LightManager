@@ -43,7 +43,9 @@ void LightManagerModule::setup()
     const uint8_t count = (requested > HCL::MasterManager::MAX_MASTERS)
                             ? HCL::MasterManager::MAX_MASTERS : requested;
 
-    HCL::masterManager.setMasterCount(count);
+    // Register ourselves as IMasterProvider so the facade can look up channel-hosted masters.
+    HCL::masterManager.setProvider(this);
+    HCL::masterManager.setEnabled(enabled);
     HCL::masterManager.setUpdateInterval(ParamLMG_LMGHCLUpdateInterval);
     HCL::masterManager.setFadeDuration(ParamLMG_LMGHCLFadeDuration);
 
@@ -117,10 +119,9 @@ void LightManagerModule::loop()
 
         // Also push to registered ILightManagerOutput sinks (Hue etc.)
         const uint8_t mn = ch->masterNumber();
-        const bool blocked = HCL::masterManager.isApplyBlocked() ||
-                             HCL::masterManager.isMasterApplyBlocked(mn);
+        const bool blocked = HCL::masterManager.isApplyBlocked() || ch->applyBlocked();
         if (blocked) continue;
-        const HCL::InterpolatedValue val = HCL::masterManager.getCurrentValue(mn);
+        const HCL::InterpolatedValue val = ch->currentValue();
         const uint8_t fade = HCL::masterManager.getFadeDuration();
         for (auto& reg : _outputs)
         {
@@ -186,11 +187,12 @@ void LightManagerModule::registerOutput(uint8_t masterNum, ILightManagerOutput* 
 
     _outputs.push_back({masterNum, target});
 
-    const bool blocked = HCL::masterManager.isApplyBlocked() ||
-                         HCL::masterManager.isMasterApplyBlocked(masterNum);
+    if (masterNum > _channels.size()) return;
+    LightManagerChannel* ch = _channels[masterNum - 1].get();
+    const bool blocked = HCL::masterManager.isApplyBlocked() || ch->applyBlocked();
     if (!blocked)
     {
-        const HCL::InterpolatedValue val = HCL::masterManager.getCurrentValue(masterNum);
+        const HCL::InterpolatedValue val = ch->currentValue();
         const uint8_t fade = HCL::masterManager.getFadeDuration();
         target->onLightManagerValue(masterNum, val.kelvin, val.brightness, fade);
     }
@@ -208,9 +210,9 @@ void LightManagerModule::unregisterOutput(ILightManagerOutput* target)
 
 void LightManagerModule::notifyOutputActive(uint8_t masterNum, bool active)
 {
-    if (masterNum < 1 || masterNum > HCL::MasterManager::MAX_MASTERS) return;
+    if (masterNum < 1 || masterNum > _channels.size()) return;
     if (!active)
-        HCL::masterManager.setMasterApplyBlocked(masterNum, false);
+        _channels[masterNum - 1]->setApplyBlocked(false);
 }
 
 // ---------------------------------------------------------------------------
@@ -382,4 +384,44 @@ void LightManagerModule::readFlash(const uint8_t* /*data*/, const uint16_t size)
 
     for (auto& ch : _channels)
         ch->restoreSummerFromMask(mask);
+}
+
+// ---------------------------------------------------------------------------
+// HCL::IMasterProvider implementation
+// ---------------------------------------------------------------------------
+
+HCL::Master* LightManagerModule::providerGetMaster(uint8_t masterNum)
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return nullptr;
+    return _channels[masterNum - 1]->masterPtr();
+}
+
+HCL::InterpolatedValue LightManagerModule::providerGetCurrentValue(uint8_t masterNum) const
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return HCL::InterpolatedValue{};
+    return _channels[masterNum - 1]->currentValue();
+}
+
+void LightManagerModule::providerSetCurrentValue(uint8_t masterNum, const HCL::InterpolatedValue& value)
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return;
+    _channels[masterNum - 1]->setCurrentValue(value);
+}
+
+bool LightManagerModule::providerIsMasterApplyBlocked(uint8_t masterNum) const
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return false;
+    return _channels[masterNum - 1]->applyBlocked();
+}
+
+void LightManagerModule::providerSetMasterApplyBlocked(uint8_t masterNum, bool blocked)
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return;
+    _channels[masterNum - 1]->setApplyBlocked(blocked);
+}
+
+bool LightManagerModule::providerIsMasterAdaptiveActive(uint8_t masterNum, uint16_t currentTimeMinutes, uint32_t nowMs) const
+{
+    if (masterNum < 1 || masterNum > _channels.size()) return false;
+    return _channels[masterNum - 1]->isAdaptiveActive(currentTimeMinutes, nowMs);
 }
