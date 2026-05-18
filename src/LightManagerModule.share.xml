@@ -196,7 +196,7 @@
               <Parameter Id="%AID%_P-%TT%00010" Name="LMGHCLEnable" ParameterType="%AID%_PT-LMGHCLEnable" Text="Lichtmanager" Value="1">
                 <Memory CodeSegment="%MID%" Offset="31" BitOffset="0" />
               </Parameter>
-              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Anzahl Lichtmanager" Value="4" SuffixText=" von 16">
+              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Verfügbare Kanäle" Value="4" SuffixText=" von 16">
                 <Memory CodeSegment="%MID%" Offset="32" BitOffset="0" />
               </Parameter>
               <Parameter Id="%AID%_P-%TT%00012" Name="LMGHCLUpdateInterval" ParameterType="%AID%_PT-LMGHCLUpdateInterval" Text="Aktualisierungsintervall" Value="60" SuffixText=" s">
@@ -247,12 +247,18 @@
           <Dynamic>
             <Channel Id="%AID%_CH-LMG" Number="LMG" Name="Lichtmanager" Text="Lichtmanager" Icon="table-clock" HelpContext="LMG-Allgemein">
 
-              <ParameterBlock Id="%AID%_PB-LMGHCL" Name="HueHCL" Text="Einstellungen" Icon="cog-outline" HelpContext="LMG-Lichtmanager">
-                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Lichtmanager" UIHint="Headline" HelpContext="LMG-Lichtmanager" />
+              <ParameterBlock Id="%AID%_PB-LMGHCL" Name="HueHCL" Text="Allgemein" ShowInComObjectTree="true" Icon="cog-outline" HelpContext="LMG-Allgemein">
+                <ParameterSeparator Id="%AID%_PS-LMGHead" Text="Lichtmanager" UIHint="Headline" />
+                <ParameterSeparator Id="%AID%_PS-LMGVer" Text="Version: %ModuleVersion%" />
+                <ParameterSeparator Id="%AID%_PS-LMGRule1" Text="" UIHint="HorizontalRuler" />
+                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Kanalauswahl" UIHint="Headline" HelpContext="LMG-Lichtmanager" />
                 <ParameterRefRef RefId="%AID%_P-%TT%00010_R-%TT%0001001" HelpContext="LMG-Lichtmanager" />
                 <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
                   <when test="1">
                     <ParameterRefRef RefId="%AID%_P-%TT%00011_R-%TT%0001101" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
+
+                    <ParameterSeparator Id="%AID%_PS-LMGRule2" Text="" UIHint="HorizontalRuler" />
+                    <ParameterSeparator Id="%AID%_PS-LMGSettings" Text="Einstellungen" UIHint="Headline" HelpContext="LMG-Lichtmanager" />
                     <ParameterRefRef RefId="%AID%_P-%TT%00012_R-%TT%0001201" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
                     <ParameterRefRef RefId="%AID%_P-%TT%00013_R-%TT%0001301" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
 
