@@ -355,7 +355,11 @@ bool LightManagerModule::shouldReleaseByPolicyTime(int16_t activationDayOfYear, 
 // Flash persistence (per-master "is summer" for season mode 3)
 // ---------------------------------------------------------------------------
 
-static constexpr uint8_t LMG_SUMMER_FLASH_VERSION = 0x01;
+// 0x01: pre-channel-owner layout (state lived in HCL::MasterManager arrays).
+// 0x02: channel-owner layout (state lives in LightManagerChannel; bit i =
+//       channel i = master i+1). Identical byte layout but bumped so older
+//       firmwares' flash is cleanly discarded on first read.
+static constexpr uint8_t LMG_SUMMER_FLASH_VERSION = 0x02;
 
 uint16_t LightManagerModule::flashSize() { return 3; }
 
