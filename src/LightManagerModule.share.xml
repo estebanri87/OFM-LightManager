@@ -275,6 +275,15 @@
                 </choose>
               </ParameterBlock>
 
+              <!-- LM-Channel-Template einbinden (LM1..LM16 als Unterbloecke innerhalb Lichtmanager) -->
+              <!-- Nur sichtbar wenn Lichtmanager aktiviert (LMGHCLEnable=1); pro-Channel-Sichtbarkeit -->
+              <!-- erfolgt im templ.xml via choose(LMGHCLMasterCount >= %C%) -->
+              <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
+                <when test="1">
+                  <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock" type="template" prefix="LMG" IsInner="true" />
+                </when>
+              </choose>
+
             </Channel>
           </Dynamic>
 
