@@ -259,7 +259,6 @@ bool LightManagerChannel::processChannelKo(GroupObject& ko, uint16_t channelKoIn
             if (m)
             {
                 m->setIsSummer(ko.value(Dpt(1, 1)));
-                openknx.flash.save();
             }
             return true;
         }
