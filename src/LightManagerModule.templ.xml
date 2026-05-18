@@ -450,6 +450,8 @@
                                             <ParameterRefRef RefId="%AID%_P-%TT%%CC%022_R-%TT%%CC%02201" IndentLevel="1" />
                                           </when>
                                         </choose>
+                                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%002_R-%TT%%CC%00201" />
+                                        <ComObjectRefRef RefId="%AID%_O-%TT%%CC%003_R-%TT%%CC%00301" />
                                         <ParameterSeparator Id="%AID%_PS-CH%CC%AdvancedLine" Text="" UIHint="HorizontalRuler" />
                                         <ParameterSeparator Id="%AID%_PS-CH%CC%Advanced" Text="Erweiterte Kurve" UIHint="Headline" />
                                         <ParameterRefRef RefId="%AID%_P-%TT%%CC%018_R-%TT%%CC%01801" />
