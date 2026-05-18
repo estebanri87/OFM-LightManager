@@ -15,7 +15,7 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 `Stützpunkte / Astro / Sensor` → `OFM-LightManager` → `Status-KOs / Konsumenten-Modul`
 
 **Wichtig:**
-- Das Modul stellt nur Sollwerte bereit. Die eigentliche Ausgabe an Leuchten erfolgt in den jeweiligen Ziel-Modulen oder GA´s).
+- Das Modul stellt nur Sollwerte bereit. Die eigentliche Ausgabe an Leuchten erfolgt in den jeweiligen Ziel-Modulen oder GA´s.
 - Parameter und KOs müssen in ETS konsistent projektiert werden.
 - Logikfunktionen (Saison-Logik, Zentralfunktionen) können in dedizierten Logikmodulen umgesetzt werden.
 <!-- DOCEND -->
@@ -107,13 +107,13 @@ Diese Vorgabe gilt für globale, manager-spezifische und kanal-spezifische Sperr
 Verfügbare Strategien:
 1. **Definierte Rückfallzeit**: verwendet ausschließlich die gewählte Rückfallzeit aus der Dropdown-Liste.
 2. **Freie Dauer**: verwendet den Parameter **Freie Rückfalldauer** in Sekunden.
-3. **Freie Uhrzeit**: verwendet den Parameter **Rückfall-Uhrzeit (HH:MM)**.
+3. **Freie Uhrzeit**: verwendet den Parameter **Rückfall-Uhrzeit**.
 4. **Dauer oder Uhrzeit**: hebt die Sperre auf, sobald entweder die freie Dauer abgelaufen ist oder die Rückfall-Uhrzeit erreicht wird.
 5. **Nur externes Entsperren**: es erfolgt keine automatische Freigabe; die Sperre muss über ein KO aufgehoben werden.
 
 Ergänzende Parameter:
 - **Freie Rückfalldauer**: Bereich `0..65535 s`, Standard `1800 s`
-- **Rückfall-Uhrzeit (HH:MM)**: Standard `03:00`
+- **Rückfall-Uhrzeit**: Standard `03:00`
 
 Hinweis:
 - Für das externe Entsperren steht zusätzlich das globale KO `Entsperren Trigger` zur Verfügung.
@@ -311,8 +311,8 @@ Passend zur Polarität des sendenden Gerätes einstellen (z. B. Präsenzmelder, 
 <!-- DOC HelpContext="HCL-Adaptive-Zeitfenster" -->
 Definiert das Zeitfenster, in dem die adaptive Regelung aktiv ist. Nur sichtbar bei Aktivierung = „Nach Uhrzeit".
 
-- **Startzeit**: Beginn der aktiven Phase (HH:MM).
-- **Endzeit**: Ende der aktiven Phase (HH:MM).
+- **Startzeit**: Beginn der aktiven Phase.
+- **Endzeit**: Ende der aktiven Phase.
 
 Außerhalb des Zeitfensters ist die adaptive Regelung pausiert; der Lichtmanager folgt nur der HCL-Kurve.
 <!-- DOCEND -->
