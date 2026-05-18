@@ -257,20 +257,20 @@
                     <ParameterRefRef RefId="%AID%_P-%TT%00013_R-%TT%0001301" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
 
                     <ParameterSeparator Id="%AID%_PS-LMGHCLLockLine" Text="" UIHint="HorizontalRuler" />
-                    <ParameterSeparator Id="%AID%_PS-LMGHCLLockHead" Text="Lichtmanager Sperre (global)" UIHint="Headline" HelpContext="LMG-Lichtmanager-Sperre" />
+                    <ParameterSeparator Id="%AID%_PS-LMGHCLLockHead" Text="Lichtmanager Sperre (global)" UIHint="Headline" HelpContext="LMG-HCL-Sperre-global" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00003_R-%TT%0000301" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00004_R-%TT%0000401" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00037_R-%TT%0003701" />
-                    <ParameterRefRef RefId="%AID%_P-%TT%00042_R-%TT%0004201" IndentLevel="1" HelpContext="LMG-Lichtmanager-Sperre" />
+                    <ParameterRefRef RefId="%AID%_P-%TT%00042_R-%TT%0004201" IndentLevel="1" HelpContext="LMG-HCL-Sperre-global" />
                     <choose ParamRefId="%AID%_P-%TT%00042_R-%TT%0004201">
                       <when test="2">
-                        <ParameterRefRef RefId="%AID%_P-%TT%00043_R-%TT%0004301" IndentLevel="2" HelpContext="LMG-Lichtmanager-Sperre" />
+                        <ParameterRefRef RefId="%AID%_P-%TT%00043_R-%TT%0004301" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
                       </when>
                       <when test="3">
-                        <ParameterRefRef RefId="%AID%_P-%TT%00044_R-%TT%0004401" IndentLevel="2" HelpContext="LMG-Lichtmanager-Sperre" />
+                        <ParameterRefRef RefId="%AID%_P-%TT%00044_R-%TT%0004401" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
                       </when>
                     </choose>
-                    <ParameterRefRef RefId="%AID%_P-%TT%00014_R-%TT%0001401" IndentLevel="1" HelpContext="LMG-Lichtmanager-Sperre" />
+                    <ParameterRefRef RefId="%AID%_P-%TT%00014_R-%TT%0001401" IndentLevel="1" HelpContext="LMG-HCL-Sperre-global" />
                   </when>
                 </choose>
               </ParameterBlock>
@@ -289,6 +289,11 @@
 
         </ApplicationProgram>
       </ApplicationPrograms>
+      <Baggages>
+        <Baggage TargetPath="" Name="Help_de.zip" Id="%FILE-HELP-de%">
+          <FileInfo TimeInfo="%DATETIME%" />
+        </Baggage>
+      </Baggages>
     </Manufacturer>
   </ManufacturerData>
 </KNX>
