@@ -33,7 +33,8 @@ public:
         Duration       = 1,
         TimeOfDay      = 2,
         DurationOrTime = 3,
-        ExternalOnly   = 4
+        ExternalOnly   = 4,
+        Disabled       = 5
     };
 
     explicit LightManagerChannel(uint8_t channelIndex);

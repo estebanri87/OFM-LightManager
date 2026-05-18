@@ -4,17 +4,6 @@
 namespace
 {
 
-String readFixedTimeParam(const uint8_t* rawTime)
-{
-    if (rawTime == nullptr || rawTime[0] == '\0')
-    {
-        return String("");
-    }
-    char buffer[6] = {0, 0, 0, 0, 0, 0};
-    memcpy(buffer, rawTime, 5);
-    return String(buffer);
-}
-
 bool isDateInSummerRange(uint8_t month, uint8_t day,
                          uint8_t startMonth, uint8_t startDay,
                          uint8_t endMonth, uint8_t endDay)
@@ -57,7 +46,7 @@ void LightManagerChannel::loadSetpoints()
     HCL::Master* m = master();
     if (!m) return;
 
-    struct Sp { const uint8_t* timeRaw; uint16_t kelvin; uint8_t brightness; bool active; };
+    struct Sp { uint16_t timeMinutes; uint16_t kelvin; uint8_t brightness; bool active; };
     const Sp sps[10] = {
         {ParamLMG_CHSP0Time, ParamLMG_CHSP0Kelvin, ParamLMG_CHSP0Brightness, ParamLMG_CHSP0Active != 0},
         {ParamLMG_CHSP1Time, ParamLMG_CHSP1Kelvin, ParamLMG_CHSP1Brightness, ParamLMG_CHSP1Active != 0},
@@ -77,10 +66,7 @@ void LightManagerChannel::loadSetpoints()
     for (int i = 0; i < 10; i++)
     {
         if (!sps[i].active) continue;
-        const String s = readFixedTimeParam(sps[i].timeRaw);
-        const uint16_t mins = HCL::Setpoint::parseTime(s.c_str());
-        if (mins == 0xFFFF) continue;
-        m->setSetpoint(i, HCL::Setpoint(mins, sps[i].kelvin, sps[i].brightness));
+        m->setSetpoint(i, HCL::Setpoint(sps[i].timeMinutes, sps[i].kelvin, sps[i].brightness));
     }
 
     m->sortSetpoints();
@@ -91,7 +77,7 @@ void LightManagerChannel::loadSummerSetpoints()
     HCL::Master* m = master();
     if (!m) return;
 
-    struct Sp { const uint8_t* timeRaw; uint16_t kelvin; uint8_t brightness; bool active; };
+    struct Sp { uint16_t timeMinutes; uint16_t kelvin; uint8_t brightness; bool active; };
     const Sp sps[10] = {
         {ParamLMG_CHSP0Time, ParamLMG_CHSP0SummerKelvin, ParamLMG_CHSP0SummerBrightness, ParamLMG_CHSP0Active != 0},
         {ParamLMG_CHSP1Time, ParamLMG_CHSP1SummerKelvin, ParamLMG_CHSP1SummerBrightness, ParamLMG_CHSP1Active != 0},
@@ -112,14 +98,7 @@ void LightManagerChannel::loadSummerSetpoints()
             m->setSummerSetpoint(i, HCL::Setpoint(0xFFFF, 4000, 100));
             continue;
         }
-        const String s = readFixedTimeParam(sps[i].timeRaw);
-        const uint16_t mins = HCL::Setpoint::parseTime(s.c_str());
-        if (mins == 0xFFFF)
-        {
-            m->setSummerSetpoint(i, HCL::Setpoint(0xFFFF, 4000, 100));
-            continue;
-        }
-        m->setSummerSetpoint(i, HCL::Setpoint(mins, sps[i].kelvin, sps[i].brightness));
+        m->setSummerSetpoint(i, HCL::Setpoint(sps[i].timeMinutes, sps[i].kelvin, sps[i].brightness));
     }
     m->sortSummerSetpoints();
 }
@@ -141,14 +120,7 @@ void LightManagerChannel::applyAdvanced(float latitudeDeg, float longitudeDeg, i
     m->setAstronomicalProfile(ParamLMG_CHAstroMinKelvin, ParamLMG_CHAstroMaxKelvin,
                               ParamLMG_CHAstroMinBrightness, ParamLMG_CHAstroMaxBrightness);
 
-    const String sunriseStr = readFixedTimeParam(ParamLMG_CHSunrise);
-    const String sunsetStr  = readFixedTimeParam(ParamLMG_CHSunset);
-    const uint16_t sunriseMin = HCL::Setpoint::parseTime(sunriseStr.c_str());
-    const uint16_t sunsetMin  = HCL::Setpoint::parseTime(sunsetStr.c_str());
-    if (sunriseMin != 0xFFFF && sunsetMin != 0xFFFF)
-        m->setSunTimes(sunriseMin, sunsetMin);
-    else
-        m->clearSunTimes();
+    m->setSunTimes(ParamLMG_CHSunrise, ParamLMG_CHSunset);
 
     m->setSunOffsets(static_cast<int16_t>(ParamLMG_CHSunriseOffset),
                      static_cast<int16_t>(ParamLMG_CHSunsetOffset));
@@ -175,12 +147,8 @@ void LightManagerChannel::loadAdaptive()
 
     cfg.deadbandLux = ParamLMG_CHAdaptiveDeadband;
 
-    const String startStr = readFixedTimeParam(ParamLMG_CHAdaptiveStartTime);
-    const String endStr   = readFixedTimeParam(ParamLMG_CHAdaptiveEndTime);
-    cfg.activeStartMinutes = HCL::Setpoint::parseTime(startStr.c_str());
-    cfg.activeEndMinutes   = HCL::Setpoint::parseTime(endStr.c_str());
-    if (cfg.activeStartMinutes == 0xFFFF) cfg.activeStartMinutes = 360;
-    if (cfg.activeEndMinutes   == 0xFFFF) cfg.activeEndMinutes   = 1320;
+    cfg.activeStartMinutes = ParamLMG_CHAdaptiveStartTime;
+    cfg.activeEndMinutes   = ParamLMG_CHAdaptiveEndTime;
 
     cfg.dayNightPolarity = (ParamLMG_CHAdaptiveDayNightPolarity != 0);
     m->setAdaptiveConfig(cfg);
@@ -190,14 +158,13 @@ void LightManagerChannel::loadLockFallbackParams()
 {
     _lockFallbackMode   = ParamLMG_CHLockFallback;
     _lockFallbackPolicy = ParamLMG_CHFallbackPolicy;
-    if (_lockFallbackPolicy > static_cast<uint8_t>(LockFallbackPolicy::ExternalOnly))
+    if (_lockFallbackPolicy > static_cast<uint8_t>(LockFallbackPolicy::Disabled))
         _lockFallbackPolicy = static_cast<uint8_t>(LockFallbackPolicy::Legacy);
 
     const uint64_t durMs = static_cast<uint64_t>(ParamLMG_CHFallbackDurationSec) * 1000ULL;
     _lockFallbackDurationMs = (durMs > 0xFFFFFFFFULL) ? 0xFFFFFFFFUL : static_cast<uint32_t>(durMs);
 
-    const String releaseStr = readFixedTimeParam(ParamLMG_CHFallbackReleaseTime);
-    _lockFallbackReleaseMinuteOfDay = HCL::Setpoint::parseTime(releaseStr.c_str());
+    _lockFallbackReleaseMinuteOfDay = ParamLMG_CHFallbackReleaseTime;
 }
 
 // ---------------------------------------------------------------------------
@@ -321,6 +288,9 @@ bool LightManagerChannel::processChannelKo(GroupObject& ko, uint16_t channelKoIn
 
 void LightManagerChannel::setLock(bool active, const char* reason)
 {
+    if (active && static_cast<LockFallbackPolicy>(_lockFallbackPolicy) == LockFallbackPolicy::Disabled)
+        return;
+
     const bool changed = (_lockActive != active);
     _lockActive = active;
     _applyBlocked = active;

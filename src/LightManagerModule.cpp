@@ -14,15 +14,6 @@ int16_t decodeBaseTimezoneOffsetMinutes(uint8_t timezoneRaw)
     return 60;
 }
 
-String readFixedTimeParam(const uint8_t* rawTime)
-{
-    if (rawTime == nullptr || rawTime[0] == '\0')
-        return String("");
-    char buffer[6] = {0, 0, 0, 0, 0, 0};
-    memcpy(buffer, rawTime, 5);
-    return String(buffer);
-}
-
 } // namespace
 
 LightManagerModule::LightManagerModule() = default;
@@ -58,10 +49,7 @@ void LightManagerModule::setup()
         const uint64_t durMs = static_cast<uint64_t>(ParamLMG_LMGHCLFallbackDurationSec) * 1000ULL;
         _hclFallbackDurationMs = (durMs > 0xFFFFFFFFULL) ? 0xFFFFFFFFUL : static_cast<uint32_t>(durMs);
     }
-    {
-        const String relStr = readFixedTimeParam(ParamLMG_LMGHCLFallbackReleaseTime);
-        _hclFallbackReleaseMinuteOfDay = HCL::Setpoint::parseTime(relStr.c_str());
-    }
+    _hclFallbackReleaseMinuteOfDay = ParamLMG_LMGHCLFallbackReleaseTime;
 
     // Resolve global location/timezone (BASE common params)
     float latitude  = 50.115377f;
