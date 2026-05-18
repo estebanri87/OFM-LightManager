@@ -18,11 +18,43 @@ bool isDateInSummerRange(uint8_t month, uint8_t day,
     return current >= start || current <= end;
 }
 
+constexpr uint8_t kSpCount             = 10;
+constexpr uint8_t kSpTimeStride        = 5; // Time(2) + Kelvin(2) + Brightness(1)
+constexpr uint8_t kSpKelvinStride      = 2;
+constexpr uint8_t kSpBrightnessStride  = 1;
+constexpr uint8_t kSpSummerKelvinStride     = 2;
+constexpr uint8_t kSpSummerBrightnessStride = 1;
+
+static_assert(LMG_CHSP1Time      - LMG_CHSP0Time      == kSpTimeStride,       "SP Time stride changed");
+static_assert(LMG_CHSP9Time      - LMG_CHSP0Time      == kSpTimeStride * 9,   "SP Time layout broken");
+static_assert(LMG_CHSP1Kelvin    - LMG_CHSP0Kelvin    == kSpKelvinStride,     "SP Kelvin stride changed");
+static_assert(LMG_CHSP9Kelvin    - LMG_CHSP0Kelvin    == kSpKelvinStride * 9, "SP Kelvin layout broken");
+static_assert(LMG_CHSP1Brightness - LMG_CHSP0Brightness == kSpBrightnessStride,     "SP Brightness stride changed");
+static_assert(LMG_CHSP9Brightness - LMG_CHSP0Brightness == kSpBrightnessStride * 9, "SP Brightness layout broken");
+static_assert(LMG_CHSP1SummerKelvin - LMG_CHSP0SummerKelvin == kSpSummerKelvinStride,     "SP SummerKelvin stride changed");
+static_assert(LMG_CHSP9SummerKelvin - LMG_CHSP0SummerKelvin == kSpSummerKelvinStride * 9, "SP SummerKelvin layout broken");
+static_assert(LMG_CHSP1SummerBrightness - LMG_CHSP0SummerBrightness == kSpSummerBrightnessStride,     "SP SummerBrightness stride changed");
+static_assert(LMG_CHSP9SummerBrightness - LMG_CHSP0SummerBrightness == kSpSummerBrightnessStride * 9, "SP SummerBrightness layout broken");
+
+// Active flags: SP0..SP7 share byte 57 (MSB=SP0), SP8..SP9 share byte 58 (MSB=SP8)
+static_assert(LMG_CHSP0Active == LMG_CHSP7Active,     "SP0..SP7 Active must share one byte");
+static_assert(LMG_CHSP8Active == LMG_CHSP9Active,     "SP8..SP9 Active must share one byte");
+static_assert(LMG_CHSP8Active - LMG_CHSP0Active == 1, "SP Active bytes must be adjacent");
+static_assert(LMG_CHSP0ActiveMask == 0x80, "SP0 Active must be MSB");
+static_assert(LMG_CHSP7ActiveMask == 0x01, "SP7 Active must be LSB");
+static_assert(LMG_CHSP8ActiveMask == 0x80, "SP8 Active must be MSB of next byte");
+
 } // namespace
 
 LightManagerChannel::LightManagerChannel(uint8_t channelIndex)
 {
     _channelIndex = channelIndex;
+}
+
+bool LightManagerChannel::readSpActive(uint8_t i) const
+{
+    const uint8_t byte = knx.paramByte(LMG_ParamCalcIndex(LMG_CHSP0Active) + (i / 8));
+    return (byte & (0x80 >> (i % 8))) != 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -46,27 +78,21 @@ void LightManagerChannel::loadSetpoints()
     HCL::Master* m = master();
     if (!m) return;
 
-    struct Sp { uint16_t timeMinutes; uint16_t kelvin; uint8_t brightness; bool active; };
-    const Sp sps[10] = {
-        {ParamLMG_CHSP0Time, ParamLMG_CHSP0Kelvin, ParamLMG_CHSP0Brightness, ParamLMG_CHSP0Active != 0},
-        {ParamLMG_CHSP1Time, ParamLMG_CHSP1Kelvin, ParamLMG_CHSP1Brightness, ParamLMG_CHSP1Active != 0},
-        {ParamLMG_CHSP2Time, ParamLMG_CHSP2Kelvin, ParamLMG_CHSP2Brightness, ParamLMG_CHSP2Active != 0},
-        {ParamLMG_CHSP3Time, ParamLMG_CHSP3Kelvin, ParamLMG_CHSP3Brightness, ParamLMG_CHSP3Active != 0},
-        {ParamLMG_CHSP4Time, ParamLMG_CHSP4Kelvin, ParamLMG_CHSP4Brightness, ParamLMG_CHSP4Active != 0},
-        {ParamLMG_CHSP5Time, ParamLMG_CHSP5Kelvin, ParamLMG_CHSP5Brightness, ParamLMG_CHSP5Active != 0},
-        {ParamLMG_CHSP6Time, ParamLMG_CHSP6Kelvin, ParamLMG_CHSP6Brightness, ParamLMG_CHSP6Active != 0},
-        {ParamLMG_CHSP7Time, ParamLMG_CHSP7Kelvin, ParamLMG_CHSP7Brightness, ParamLMG_CHSP7Active != 0},
-        {ParamLMG_CHSP8Time, ParamLMG_CHSP8Kelvin, ParamLMG_CHSP8Brightness, ParamLMG_CHSP8Active != 0},
-        {ParamLMG_CHSP9Time, ParamLMG_CHSP9Kelvin, ParamLMG_CHSP9Brightness, ParamLMG_CHSP9Active != 0},
-    };
+    const uint16_t timeBase       = LMG_ParamCalcIndex(LMG_CHSP0Time);
+    const uint16_t kelvinBase     = LMG_ParamCalcIndex(LMG_CHSP0Kelvin);
+    const uint16_t brightnessBase = LMG_ParamCalcIndex(LMG_CHSP0Brightness);
 
-    for (int i = 0; i < 10; i++)
-        m->setSetpoint(i, HCL::Setpoint(0xFFFF, 4000, 100));
-
-    for (int i = 0; i < 10; i++)
+    for (uint8_t i = 0; i < kSpCount; ++i)
     {
-        if (!sps[i].active) continue;
-        m->setSetpoint(i, HCL::Setpoint(sps[i].timeMinutes, sps[i].kelvin, sps[i].brightness));
+        if (!readSpActive(i))
+        {
+            m->setSetpoint(i, HCL::Setpoint(0xFFFF, 4000, 100));
+            continue;
+        }
+        const uint16_t time       = knx.paramWord(timeBase   + i * kSpTimeStride);
+        const uint16_t kelvin     = knx.paramWord(kelvinBase + i * kSpKelvinStride);
+        const uint8_t  brightness = knx.paramByte(brightnessBase + i * kSpBrightnessStride);
+        m->setSetpoint(i, HCL::Setpoint(time, kelvin, brightness));
     }
 
     m->sortSetpoints();
@@ -77,28 +103,21 @@ void LightManagerChannel::loadSummerSetpoints()
     HCL::Master* m = master();
     if (!m) return;
 
-    struct Sp { uint16_t timeMinutes; uint16_t kelvin; uint8_t brightness; bool active; };
-    const Sp sps[10] = {
-        {ParamLMG_CHSP0Time, ParamLMG_CHSP0SummerKelvin, ParamLMG_CHSP0SummerBrightness, ParamLMG_CHSP0Active != 0},
-        {ParamLMG_CHSP1Time, ParamLMG_CHSP1SummerKelvin, ParamLMG_CHSP1SummerBrightness, ParamLMG_CHSP1Active != 0},
-        {ParamLMG_CHSP2Time, ParamLMG_CHSP2SummerKelvin, ParamLMG_CHSP2SummerBrightness, ParamLMG_CHSP2Active != 0},
-        {ParamLMG_CHSP3Time, ParamLMG_CHSP3SummerKelvin, ParamLMG_CHSP3SummerBrightness, ParamLMG_CHSP3Active != 0},
-        {ParamLMG_CHSP4Time, ParamLMG_CHSP4SummerKelvin, ParamLMG_CHSP4SummerBrightness, ParamLMG_CHSP4Active != 0},
-        {ParamLMG_CHSP5Time, ParamLMG_CHSP5SummerKelvin, ParamLMG_CHSP5SummerBrightness, ParamLMG_CHSP5Active != 0},
-        {ParamLMG_CHSP6Time, ParamLMG_CHSP6SummerKelvin, ParamLMG_CHSP6SummerBrightness, ParamLMG_CHSP6Active != 0},
-        {ParamLMG_CHSP7Time, ParamLMG_CHSP7SummerKelvin, ParamLMG_CHSP7SummerBrightness, ParamLMG_CHSP7Active != 0},
-        {ParamLMG_CHSP8Time, ParamLMG_CHSP8SummerKelvin, ParamLMG_CHSP8SummerBrightness, ParamLMG_CHSP8Active != 0},
-        {ParamLMG_CHSP9Time, ParamLMG_CHSP9SummerKelvin, ParamLMG_CHSP9SummerBrightness, ParamLMG_CHSP9Active != 0},
-    };
+    const uint16_t timeBase       = LMG_ParamCalcIndex(LMG_CHSP0Time);
+    const uint16_t kelvinBase     = LMG_ParamCalcIndex(LMG_CHSP0SummerKelvin);
+    const uint16_t brightnessBase = LMG_ParamCalcIndex(LMG_CHSP0SummerBrightness);
 
-    for (int i = 0; i < 10; i++)
+    for (uint8_t i = 0; i < kSpCount; ++i)
     {
-        if (!sps[i].active)
+        if (!readSpActive(i))
         {
             m->setSummerSetpoint(i, HCL::Setpoint(0xFFFF, 4000, 100));
             continue;
         }
-        m->setSummerSetpoint(i, HCL::Setpoint(sps[i].timeMinutes, sps[i].kelvin, sps[i].brightness));
+        const uint16_t time       = knx.paramWord(timeBase   + i * kSpTimeStride);
+        const uint16_t kelvin     = knx.paramWord(kelvinBase + i * kSpSummerKelvinStride);
+        const uint8_t  brightness = knx.paramByte(brightnessBase + i * kSpSummerBrightnessStride);
+        m->setSummerSetpoint(i, HCL::Setpoint(time, kelvin, brightness));
     }
     m->sortSummerSetpoints();
 }

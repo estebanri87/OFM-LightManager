@@ -85,6 +85,7 @@ private:
     // Setup helpers
     void loadSetpoints();
     void loadSummerSetpoints();
+    bool readSpActive(uint8_t i) const;
     void applyAdvanced(float latitudeDeg, float longitudeDeg, int16_t timezoneOffsetMin);
     void loadAdaptive();
     void loadLockFallbackParams();
