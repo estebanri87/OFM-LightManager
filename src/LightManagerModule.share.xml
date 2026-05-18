@@ -42,6 +42,34 @@
               <ParameterType Id="%AID%_PT-LMGHCLMasterCount" Name="LMGHCLMasterCount">
                 <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="16" />
               </ParameterType>
+              <!--
+                Public, wiederverwendbarer ParameterType zur Master-Auswahl in
+                Consumer-Modulen (z. B. HueGateway, DALI, MQTT-Bridge).
+                Wertebereich 0..16: 0 = kein Lichtmanager zugeordnet,
+                1..16 = Master-Index. Consumer-Module sollten zusätzlich gegen
+                LightManagerModule::getMasterCount() clampen (Laufzeit).
+              -->
+              <ParameterType Id="%AID%_PT-LMGMasterSelect" Name="LMGMasterSelect">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Kein Lichtmanager" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 1" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 2" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 3" Value="3" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 4" Value="4" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 5" Value="5" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 6" Value="6" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 7" Value="7" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 8" Value="8" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 9" Value="9" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 10" Value="10" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 11" Value="11" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 12" Value="12" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 13" Value="13" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 14" Value="14" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 15" Value="15" Id="%ENID%" />
+                  <Enumeration Text="Lichtmanager 16" Value="16" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLSetpointCount" Name="LMGHCLSetpointCount">
                 <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
                   <Enumeration Text="1" Value="1" Id="%ENID%" />
