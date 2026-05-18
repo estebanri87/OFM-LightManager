@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HCLMaster.h"
+#include "knxprod.h"
 #include <Arduino.h>
 
 namespace HCL {
@@ -49,7 +50,10 @@ public:
  */
 class MasterManager {
 public:
-    static constexpr uint8_t MAX_MASTERS = 16;
+    // Follows OAM-defined NumChannels (LMG_ChannelCount from knxprod.h).
+    static constexpr uint8_t MAX_MASTERS = LMG_ChannelCount;
+    static_assert(LMG_ChannelCount > 0 && LMG_ChannelCount <= 255,
+                  "LMG_ChannelCount must fit into uint8_t");
 
     MasterManager();
 

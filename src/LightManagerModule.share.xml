@@ -40,13 +40,13 @@
                 </TypeRestriction>
               </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLMasterCount" Name="LMGHCLMasterCount">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="16" />
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="%N%" />
               </ParameterType>
               <!--
                 Public, wiederverwendbarer ParameterType zur Master-Auswahl in
                 Consumer-Modulen (z. B. HueGateway, DALI, MQTT-Bridge).
                 Wertebereich 0..16: 0 = kein Lichtmanager zugeordnet,
-                1..16 = Master-Index. Consumer-Module sollten zusätzlich gegen
+                1..N = Master-Index. Consumer-Module sollten zusätzlich gegen
                 LightManagerModule::getMasterCount() clampen (Laufzeit).
               -->
               <ParameterType Id="%AID%_PT-LMGMasterSelect" Name="LMGMasterSelect">
@@ -225,7 +225,7 @@
               <Parameter Id="%AID%_P-%TT%00010" Name="LMGHCLEnable" ParameterType="%AID%_PT-LMGHCLEnable" Text="Lichtmanager" Value="1">
                 <Memory CodeSegment="%MID%" Offset="31" BitOffset="0" />
               </Parameter>
-              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Verfügbare Kanäle" Value="4" SuffixText=" von 16">
+              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Verfügbare Kanäle" Value="4" SuffixText=" von %N%">
                 <Memory CodeSegment="%MID%" Offset="32" BitOffset="0" />
               </Parameter>
               <Parameter Id="%AID%_P-%TT%00012" Name="LMGHCLUpdateInterval" ParameterType="%AID%_PT-LMGHCLUpdateInterval" Text="Aktualisierungsintervall" Value="60" SuffixText=" s">

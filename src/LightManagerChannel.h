@@ -42,7 +42,7 @@ public:
     /** OpenKNX::Base override (pure virtual). */
     const std::string name() override { return "LightManagerChannel"; }
 
-    /** Master number (1..16) used by HCL::masterManager API. */
+    /** Master number (1..LMG_ChannelCount) used by HCL::masterManager API. */
     uint8_t masterNumber() const { return _channelIndex + 1; }
 
     /** Read ETS parameters for this channel and configure the HCL master. */

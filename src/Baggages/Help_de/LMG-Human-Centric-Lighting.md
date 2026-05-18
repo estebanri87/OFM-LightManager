@@ -1,5 +1,5 @@
 ﻿### Human Centric Lighting
 
 Aktiviert zeitabhängige Sollwerte für Helligkeit und Farbtemperatur.
-Bis zu 16 Lichtmanager können parallel definiert werden.
+Bis zu N Lichtmanager (Anzahl per OAM vorgegeben) können parallel definiert werden.
 

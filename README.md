@@ -92,7 +92,7 @@ Weitere Details: [doc/integration.md](doc/integration.md)
 
 ## ETS-Konfiguration
 
-- Bis zu 16 Lichtmanager konfigurierbar
+- Bis zu N Lichtmanager konfigurierbar (Anzahl im OAM vorgeben)
 - Stützpunkte SP0–SP9 (Winter + Sommer) mit Uhrzeit, Helligkeit (%) und Farbtemperatur (K)
 - Astronomische Parameter: Sonnenaufgang-/Sonnenuntergang-Offset (min), Helligkeit/CT Min/Max
 - Suffix-Anzeige in ETS: `%`, `K`, `K/min`, `lx`, `min`

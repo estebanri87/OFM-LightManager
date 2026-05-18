@@ -1,7 +1,7 @@
 # Applikationsbeschreibung OFM-LightManager
 
 OpenKNX Function-Module zur tageszeitabhängigen Steuerung von Helligkeit und Farbtemperatur (Human Centric Lighting).
-Bis zu 16 unabhängige Lichtmanager liefern Sollwerte, die von kompatiblen Ausgabemodulen (z. B. OFM-HueGatewayModule) konsumiert werden.
+Bis zu N unabhängige Lichtmanager (Anzahl per OAM vorgegeben) liefern Sollwerte, die von kompatiblen Ausgabemodulen (z. B. OFM-HueGatewayModule) konsumiert werden.
 
 <!-- DOC HelpContext="Allgemein" -->
 ### Allgemein
@@ -28,7 +28,7 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 - [Sperre (global)](#sperre-global)
 - [Rückfallstrategie nach Sperre](#rückfallstrategie-nach-sperre)
 - [Status-KOs je Lichtmanager](#status-kos-je-lichtmanager)
-- [Lichtmanager 1..16](#lichtmanager-116)
+- [Lichtmanager 1..N](#lichtmanager-1n)
 - [Saison-Profil](#saison-profil)
 - [Adaptive Helligkeit](#adaptive-helligkeit)
 - [Kommunikationsobjekte](#kommunikationsobjekte)
@@ -38,19 +38,19 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 ## Human Centric Lighting
 
 Aktiviert zeitabhängige Sollwerte für Helligkeit und Farbtemperatur.
-Bis zu 16 Lichtmanager können parallel definiert werden.
+Bis zu N Lichtmanager (Anzahl per OAM vorgegeben) können parallel definiert werden.
 
 <!-- DOC HelpContext="Lichtmanager" -->
 ### Lichtmanager
 
-Bis zu 16 unabhängige Lichtmanager berechnen Helligkeits- und Farbtemperatur-Sollwerte über den Tagesverlauf.
+Bis zu N unabhängige Lichtmanager (Anzahl per OAM vorgegeben) berechnen Helligkeits- und Farbtemperatur-Sollwerte über den Tagesverlauf.
 Jeder Lichtmanager besitzt eine eigene Kurvenkonfiguration, optionale Saison-Profile und optionale adaptive Helligkeitsregelung.
 <!-- DOCEND -->
 
 <!-- DOC HelpContext="Lichtmanager-Auswahl" -->
 ### Lichtmanager Auswahl
 
-Legt die Anzahl sichtbarer Lichtmanager-Seiten (1..16) fest.
+Legt die Anzahl sichtbarer Lichtmanager-Seiten (1..N, max. durch OAM vorgegeben) fest.
 Nur die hier aktivierten Lichtmanager werden als eigene ETS-Reiter eingeblendet.
 <!-- DOCEND -->
 
@@ -130,10 +130,10 @@ Hinweise:
 - Die KOs liefern die vom Lichtmanager berechneten Sollwerte, unabhängig davon, wie viele Konsumenten diesem zugeordnet sind.
 
 <!-- DOC -->
-### Lichtmanager 1..16
+### Lichtmanager 1..N
 
 <!-- DOC HelpContext="HCL-Manager-18" -->
-Jeder Lichtmanager 1..16 besitzt identischen Aufbau (HCL-Konfiguration):
+Jeder Lichtmanager 1..N besitzt identischen Aufbau (HCL-Konfiguration):
 
 - **Bezeichnung**: Freie ETS-Bezeichnung des Lichtmanagers.
 - **Lichtmanager Sperre (spezifisch)**: Sperrt nur den jeweiligen Manager.
@@ -444,7 +444,7 @@ Globale Sperre inkl. Statusrückmeldung.
 #### Entsperren Trigger
 1-Bit Triggerobjekt zum gleichzeitigen Aufheben aller globalen, manager-spezifischen und kanal-spezifischen Sperren.
 
-#### Sperre Lichtmanager 1..16 / Status
+#### Sperre Lichtmanager 1..N / Status
 Lichtmanager-spezifische Sperrobjekte inkl. Statusrückmeldung.
 Sichtbarkeit abhängig von der konfigurierten Anzahl Lichtmanager.
 
