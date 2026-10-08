@@ -55,12 +55,33 @@ public:
     void unregisterOutput(ILightManagerOutput* target);
     void notifyOutputActive(uint8_t masterNum, bool active);
 
+    // Per-channel timing accessors (1-based masterNum; 0 = invalid).
+    uint16_t channelUpdateIntervalSec(uint8_t masterNum) const;
+    uint8_t  channelFadeDurationSec(uint8_t masterNum) const;
+
+    // Phase 2.J.c.2: expose channel pointer for diagnostics (HueGatewayModule).
+    // Returns nullptr for channels that are deactivated or suspended in the ETS.
+    LightManagerChannel* channel(uint8_t masterNum) {
+        return (masterNum >= 1 && masterNum <= HCL::MasterManager::MAX_MASTERS)
+            ? _channels[masterNum - 1].get() : nullptr;
+    }
+    const LightManagerChannel* channel(uint8_t masterNum) const {
+        return (masterNum >= 1 && masterNum <= HCL::MasterManager::MAX_MASTERS)
+            ? _channels[masterNum - 1].get() : nullptr;
+    }
+
+    // Channel is activated in the channel selection and not suspended (0-based index).
+    bool channelConfigured(uint8_t channelIndex) const;
+    // Number of channels that are running (activated and not suspended).
+    uint8_t activeChannelCount() const;
+
     // Public API used by HueGatewayModule
     void setHclLock(bool active, const char* reason);
     void setHclManagerLock(uint8_t managerNumber, bool active, const char* reason);
 
     // --- HCL::IMasterProvider implementation -------------------------------
-    uint8_t           providerMasterCount() const override { return static_cast<uint8_t>(_channels.size()); }
+    // Highest possible master number. Channels are sparse: check channel(n) != nullptr.
+    uint8_t           providerMasterCount() const override { return HCL::MasterManager::MAX_MASTERS; }
     HCL::Master*      providerGetMaster(uint8_t masterNum) override;
     HCL::InterpolatedValue providerGetCurrentValue(uint8_t masterNum) const override;
     void              providerSetCurrentValue(uint8_t masterNum, const HCL::InterpolatedValue& value) override;
@@ -74,8 +95,12 @@ private:
         ILightManagerOutput* target;
     };
 
+    // Punkt 5: Init-Pfad fuer SummerActive bei Magic-Mismatch / SavePower=Nein.
+    void applySummerActiveInit();
+
     std::vector<OutputRegistration> _outputs;
-    std::vector<std::unique_ptr<LightManagerChannel>> _channels;
+    // Index = masterNum - 1; nullptr for deactivated or suspended channels.
+    std::unique_ptr<LightManagerChannel> _channels[HCL::MasterManager::MAX_MASTERS];
 
     // Global HCL lock state (KO 400/401/402 — affects all masters)
     bool          _hclLockActive            = false;

@@ -43,23 +43,25 @@ Header einbinden:
 
 ### 2.1 Verfügbare Master ermitteln
 
+Ab 0.4.0 werden Lichtmanager einzeln in der ETS-Kanalauswahl aktiviert. Die
+Master-Nummern sind daher nicht mehr lückenlos: Nur aktivierte und nicht
+suspendierte Master existieren zur Laufzeit.
+
 ```cpp
-const uint8_t count = HCL::masterManager.getMasterCount(); // 0..16
+const uint8_t maxMaster = HCL::masterManager.getMasterCount(); // höchste Nummer (16), nicht die Anzahl
+const bool exists = HCL::masterManager.getMaster(n) != nullptr; // bzw. openknxLightManagerModule.channel(n)
 ```
 
 ### 2.2 Wert eines Masters lesen
 
 ```cpp
-uint8_t selected = paramFromEts;          // 1..count, 0 = "kein Master"
-if (selected > 0 && selected <= count)
+uint8_t selected = paramFromEts;          // 1..16, 0 = "kein Master"
+HCL::Master* m = HCL::masterManager.getMaster(selected); // nullptr, wenn nicht aktiviert
+if (m)
 {
-    HCL::Master* m = HCL::masterManager.getMaster(selected);
-    if (m)
-    {
-        const auto v = HCL::masterManager.getCurrentValue(selected);
-        // v.brightness : 0..100 (%)
-        // v.kelvin     : z.B. 2000..6500 K
-    }
+    const auto v = HCL::masterManager.getCurrentValue(selected);
+    // v.brightness : 0..100 (%)
+    // v.kelvin     : z.B. 2000..6500 K
 }
 ```
 
@@ -84,19 +86,17 @@ HCL::reportAmbientLux(selected, luxValue);   // löst sofortiges Recalc aus
 HCL::reportDaytime(selected, isDayFromAstro);
 ```
 
-### 2.5 Range-Clamp beim Anwenden
+### 2.5 Zuordnung beim Anwenden prüfen
 
 Da die ETS-Konfiguration einen festen Range (0..16) anbietet, der
-LightManager aber zur Laufzeit ggf. weniger Master besitzt, muss das
-Consumer-OAM den ausgewählten Wert clampen:
+zugeordnete Lichtmanager aber deaktiviert oder suspendiert sein kann, muss
+das Consumer-OAM die Auswahl prüfen:
 
 ```cpp
 uint8_t sel = ParamXYZHCLMaster;
-const uint8_t dynMax = HCL::masterManager.getMasterCount();
-if (sel > dynMax)
+if (sel != 0 && openknxLightManagerModule.channel(sel) == nullptr)
 {
-    if (sel != 0)
-        logErrorP("HCL master %u out of range (max=%u) - reset to 0", sel, dynMax);
+    logErrorP("HCL master %u not active in the LightManager - reset to 0", sel);
     sel = 0;
 }
 ```
@@ -141,7 +141,7 @@ LightManager den ParameterType **`PT-LMGMasterSelect`** in seiner
 
 1. **Niemals** in den HCL-State schreiben (`Master::set...()`), außer
    eigene Sensor-Werte über `HCL::reportAmbientLux/Daytime`.
-2. Den ETS-Parameter immer gegen `getMasterCount()` clampen (siehe 2.5).
+2. Den ETS-Parameter immer auf einen aktivierten Master prüfen (siehe 2.5).
 3. Bei Aktualisierungsereignissen einfach in `loop()` lesen — der
    LightManager updated cached Werte deterministisch (`update interval`).
 4. ApplyBlocked **immer** beachten — sonst überschreibt das Consumer-OAM

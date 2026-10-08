@@ -1,4 +1,4 @@
-﻿### HCL-Adaptive-Polaritaet
+﻿### HCL-Adaptive-Polarität
 
 Legt fest, welcher KO-Wert „Tag" bedeutet. Nur sichtbar bei Aktivierung = „Nur tagsüber (per KO)".
 

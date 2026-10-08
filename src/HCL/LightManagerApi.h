@@ -20,16 +20,13 @@
  * @code
  *   #include <HCL/LightManagerApi.h>
  *
- *   const uint8_t count = HCL::masterManager.getMasterCount();
- *   if (selectedMaster > 0 && selectedMaster <= count)
+ *   // Only masters activated in the channel selection exist (nullptr otherwise).
+ *   HCL::Master* m = HCL::masterManager.getMaster(selectedMaster);
+ *   if (m && !HCL::masterManager.isApplyBlocked()
+ *         && !HCL::masterManager.isMasterApplyBlocked(selectedMaster))
  *   {
- *       HCL::Master* m = HCL::masterManager.getMaster(selectedMaster);
- *       if (m && !HCL::masterManager.isApplyBlocked()
- *             && !HCL::masterManager.isMasterApplyBlocked(selectedMaster))
- *       {
- *           const auto v = HCL::masterManager.getCurrentValue(selectedMaster);
- *           applyToHardware(v.brightness, v.kelvin);
- *       }
+ *       const auto v = HCL::masterManager.getCurrentValue(selectedMaster);
+ *       applyToHardware(v.brightness, v.kelvin);
  *   }
  * @endcode
  *
@@ -55,8 +52,8 @@ namespace HCL {
  * facade and remain valid even when no `LightManagerModule` is registered
  * (they return safe defaults: 0 / nullptr / false).
  *
- * - `MasterManager::getMasterCount()`         &mdash; number of configured masters (0..16).
- * - `MasterManager::getMaster(masterNum)`     &mdash; pointer to the master config, or `nullptr`.
+ * - `MasterManager::getMasterCount()`         &mdash; highest possible master number (16), not the number of active masters.
+ * - `MasterManager::getMaster(masterNum)`     &mdash; pointer to the master config, or `nullptr` if deactivated/suspended.
  * - `MasterManager::getCurrentValue(num)`     &mdash; latest interpolated `{brightness, kelvin}`.
  * - `MasterManager::isEnabled()`              &mdash; global enable flag (KO/parameter driven).
  * - `MasterManager::isApplyBlocked()`         &mdash; global lock active (e.g. presence override).

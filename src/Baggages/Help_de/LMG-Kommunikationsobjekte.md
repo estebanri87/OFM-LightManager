@@ -10,7 +10,7 @@ Globale Sperre inkl. Statusrückmeldung.
 
 #### Sperre Lichtmanager 1..N / Status
 Lichtmanager-spezifische Sperrobjekte inkl. Statusrückmeldung.
-Sichtbarkeit abhängig von der konfigurierten Anzahl Lichtmanager.
+Sichtbar nur für Lichtmanager, die in der **Kanalauswahl** aktiviert sind.
 
 #### Lichtmanager Status Helligkeit Soll / Farbtemperatur Soll
 Je Lichtmanager zwei Sollwert-KOs; Sichtbarkeit abhängig von Option **Status-KOs je Lichtmanager**.

@@ -2,7 +2,8 @@
 
 Jeder Lichtmanager 1..N besitzt identischen Aufbau (HCL-Konfiguration):
 
-- **Bezeichnung**: Freie ETS-Bezeichnung des Lichtmanagers.
+- **Beschreibung**: Freie ETS-Bezeichnung des Lichtmanagers (auch in der Kanalauswahl editierbar).
+- **Suspendiert**: Der Lichtmanager bleibt projektiert, wird aber nicht ausgeführt.
 - **Lichtmanager Sperre (spezifisch)**: Sperrt nur den jeweiligen Manager.
 - **Erweiterte Kurve**: Kurventyp `FixedTime`, `SunPosition`, `Manual` oder `Astronomischer Sonnenstand`.
 - **Stützpunkte**: Bis zu 10 Stützpunkte je Manager (bei `FixedTime` oder `SunPosition`).

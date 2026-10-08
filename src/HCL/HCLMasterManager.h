@@ -17,10 +17,10 @@ class IMasterProvider {
 public:
     virtual ~IMasterProvider() = default;
 
-    /** Number of configured masters (0..MAX_MASTERS). */
+    /** Highest possible master number (MAX_MASTERS). Masters are sparse: getMaster(n) may be nullptr. */
     virtual uint8_t providerMasterCount() const = 0;
 
-    /** Lookup a master by 1-based number. Returns nullptr if out-of-range. */
+    /** Lookup a master by 1-based number. Returns nullptr if out-of-range, deactivated or suspended. */
     virtual Master* providerGetMaster(uint8_t masterNum) = 0;
 
     /** Last interpolated value for a master (cached in the channel). */
@@ -72,7 +72,7 @@ public:
     bool isEnabled() const { return _enabled; }
     void setEnabled(bool enabled) { _enabled = enabled; }
 
-    /** Number of configured masters — delegated to provider (0 if none). */
+    /** Highest possible master number — delegated to provider (0 if none). Check getMaster(n) != nullptr. */
     uint8_t getMasterCount() const { return _provider ? _provider->providerMasterCount() : 0; }
 
     /** Global apply-block (affects all masters). */
@@ -86,14 +86,7 @@ public:
     /** Last calculated time-of-day in minutes (or 0xFFFF before first loop). */
     uint16_t getLastTimeMinutes() const { return _lastTimeMinutes; }
 
-    void setUpdateInterval(uint16_t seconds) { _updateIntervalMs = static_cast<uint32_t>(seconds) * 1000UL; }
-    uint16_t getUpdateInterval() const { return static_cast<uint16_t>(_updateIntervalMs / 1000UL); }
-
-    void setFadeDuration(uint8_t seconds) { _fadeDurationSec = seconds; }
-    uint8_t getFadeDuration() const { return _fadeDurationSec; }
-
     void forceUpdate();
-    uint32_t getTimeUntilNextUpdate() const;
 
     // --- Adaptive Helligkeit (delegating to master via provider) ---
     void setMasterAmbientLux(uint8_t masterNum, float lux);
@@ -104,9 +97,6 @@ private:
     IMasterProvider* _provider = nullptr;
     bool _enabled;
     bool _applyBlocked;
-    uint32_t _updateIntervalMs;
-    uint8_t _fadeDurationSec;
-    uint32_t _lastUpdateMs;
     uint16_t _lastTimeMinutes;
     int16_t _lastDayOfYear;
 

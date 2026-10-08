@@ -1,16 +1,11 @@
 #pragma once
 
-#include "HCLSetpoint.h"
+#include "HCLSetpoint.h" // InterpolatedValue
+#include "HCLTypes.h"    // Phase 2 enums/sentinels
+#include "HCLProfile.h"  // SetpointV2 / ProfileV2 / ResolvedSetpoint
 #include <Arduino.h>
 
 namespace HCL {
-
-enum class CurveType : uint8_t {
-    FixedTime = 0,
-    SunPosition = 1,
-    Manual = 2,
-    Astronomical = 3
-};
 
 enum class AdaptiveMode : uint8_t {
     Disabled = 0,
@@ -41,41 +36,20 @@ struct AdaptiveConfig {
 };
 
 /**
- * @brief Manages a single HCL Master with up to 10 setpoints
- * 
- * Provides linear interpolation between setpoints based on current time.
- * Handles wraparound at midnight (23:59 -> 00:00).
+ * @brief Per-channel HCL Master.
+ *
+ * Phase 2.J: legacy setpoint storage / curve calculators / master-level slew
+ * retired. The remaining responsibilities are:
+ *   - geo + sunrise/sunset hints for the ProfileV2 resolver
+ *   - season flag (winter/summer)
+ *   - adaptive brightness state (lux filter + config) — currently dormant,
+ *     pending re-integration into the ProfileV2 pipeline (Phase 2.K).
  */
 class Master {
 public:
-    static constexpr uint8_t MAX_SETPOINTS = 10;
-    
-    /**
-     * @brief Constructor
-     */
     Master();
-    
-    /**
-     * @brief Set a setpoint at a specific index
-     * @param index Setpoint index (0-9)
-     * @param setpoint The setpoint to set
-     * @return true if successful, false if index out of range
-     */
-    bool setSetpoint(uint8_t index, const Setpoint& setpoint);
-    
-    /**
-     * @brief Get a setpoint at a specific index
-     * @param index Setpoint index (0-9)
-     * @return Pointer to setpoint or nullptr if index out of range
-     */
-    const Setpoint* getSetpoint(uint8_t index) const;
 
-    void setCurveType(CurveType curveType) { _curveType = curveType; }
-    CurveType getCurveType() const { return _curveType; }
-
-    void setManualKelvin(uint16_t kelvin) { _manualKelvin = constrain(kelvin, 2000, 6500); }
-    uint16_t getManualKelvin() const { return _manualKelvin; }
-
+    // --- Geo / time ---
     void setLocation(float latitudeDeg, float longitudeDeg) {
         _latitudeDeg = constrain(latitudeDeg, -90.0f, 90.0f);
         _longitudeDeg = constrain(longitudeDeg, -180.0f, 180.0f);
@@ -83,108 +57,64 @@ public:
     void setTimezoneOffsetMinutes(int16_t timezoneOffsetMin) {
         _timezoneOffsetMin = constrain(timezoneOffsetMin, static_cast<int16_t>(-720), static_cast<int16_t>(840));
     }
-    void setAstronomicalProfile(uint16_t minKelvin, uint16_t maxKelvin, uint8_t minBrightness, uint8_t maxBrightness) {
-        _astroMinKelvin = constrain(minKelvin, 2000, 6500);
-        _astroMaxKelvin = constrain(maxKelvin, 2000, 6500);
-        if (_astroMaxKelvin < _astroMinKelvin) {
-            const uint16_t temp = _astroMinKelvin;
-            _astroMinKelvin = _astroMaxKelvin;
-            _astroMaxKelvin = temp;
-        }
 
-        _astroMinBrightness = constrain(minBrightness, static_cast<uint8_t>(0), static_cast<uint8_t>(100));
-        _astroMaxBrightness = constrain(maxBrightness, static_cast<uint8_t>(0), static_cast<uint8_t>(100));
-        if (_astroMaxBrightness < _astroMinBrightness) {
-            const uint8_t temp = _astroMinBrightness;
-            _astroMinBrightness = _astroMaxBrightness;
-            _astroMaxBrightness = temp;
-        }
-    }
-
+    // --- Sunrise / sunset hints (used by ProfileV2 anchors) ---
     void setSunTimes(uint16_t sunriseMinutes, uint16_t sunsetMinutes);
     void clearSunTimes() { _sunTimesValid = false; }
     bool hasSunTimes() const { return _sunTimesValid; }
     uint16_t getSunriseMinutes() const { return _sunriseMinutes; }
     uint16_t getSunsetMinutes() const { return _sunsetMinutes; }
 
-    void setSunOffsets(int16_t sunriseOffsetMin, int16_t sunsetOffsetMin) {
-        _sunriseOffsetMin = sunriseOffsetMin;
-        _sunsetOffsetMin = sunsetOffsetMin;
+    // --- F6 Astro-Engine (Punkt 5) ---
+    // Berechnet Sonnen-Deklination (0.1°-Einheiten) und Sonnen-Höhe
+    // (0.01°-Einheiten) für (dayOfYear, timeMinutes UTC-lokal) anhand Geo.
+    // Algorithmus: NOAA/Spencer 1971-Approximation. Refraktions-Korrektur
+    // (Bennett) nur wenn altDeg < 5° (Plan F6 #5).
+    // dayOfYear: 1..366. timeMinutes: 0..1439 (lokale Tageszeit inkl. DST).
+    static void computeSolarPosition(uint16_t dayOfYear,
+                                     uint16_t timeMinutes,
+                                     float latitudeDeg,
+                                     float longitudeDeg,
+                                     int16_t timezoneOffsetMin,
+                                     int16_t& outDeclinationDeci,
+                                     int16_t& outAltitudeCenti);
+
+    // Convenience: nutzt Master-Geo + setTimezoneOffsetMinutes.
+    void computeSolarPosition(uint16_t dayOfYear, uint16_t timeMinutes,
+                              int16_t& outDeclinationDeci,
+                              int16_t& outAltitudeCenti) const
+    {
+        computeSolarPosition(dayOfYear, timeMinutes,
+                             _latitudeDeg, _longitudeDeg, _timezoneOffsetMin,
+                             outDeclinationDeci, outAltitudeCenti);
     }
-    int16_t getSunriseOffsetMin() const { return _sunriseOffsetMin; }
-    int16_t getSunsetOffsetMin() const { return _sunsetOffsetMin; }
 
-    void setSlewRateKelvinPerMinute(uint16_t kelvinPerMinute) { _slewRateKelvinPerMinute = kelvinPerMinute; }
-    uint16_t getSlewRateKelvinPerMinute() const { return _slewRateKelvinPerMinute; }
-    uint16_t getAppliedKelvin() const { return _appliedKelvin; }
+    float getLatitudeDeg() const { return _latitudeDeg; }
+    float getLongitudeDeg() const { return _longitudeDeg; }
+    int16_t getTimezoneOffsetMin() const { return _timezoneOffsetMin; }
 
-    // --- Adaptive Helligkeit ---
+    // --- Season flag ---
+    void setIsSummer(bool isSummer) { _isSummer = isSummer; }
+    bool isSummer() const { return _isSummer; }
+
+    // --- Adaptive Helligkeit (Phase 2.K wiring pending) ---
     void setAdaptiveConfig(const AdaptiveConfig& config) { _adaptiveConfig = config; }
     const AdaptiveConfig& getAdaptiveConfig() const { return _adaptiveConfig; }
     void setAmbientLux(float lux);
     void setDaytime(bool isDaytime) { _isDaytime = isDaytime; }
     bool isAdaptiveCurrentlyActive(uint16_t currentTimeMinutes, uint32_t nowMs) const;
-    
-    /**
-     * @brief Calculate interpolated value for current time
-     * @param currentTimeMinutes Current time in minutes since midnight
-     * @return Interpolated color temperature and brightness
-     */
-    InterpolatedValue calculateValue(uint16_t currentTimeMinutes, uint32_t currentTimeMs, int16_t dayOfYear = -1);
-    
-    /**
-     * @brief Get number of valid setpoints
-     * @return Number of setpoints with valid time
-     */
-    uint8_t getValidSetpointCount() const;
-    
-    /**
-     * @brief Sort setpoints by time (ascending)
-     */
-    void sortSetpoints();
+    // Phase 2.K.2: öffentlicher Wrapper für applyAdaptiveBrightness, damit
+    // LightManagerChannel::pushIfChanged() die Adaptive-Schicht aufrufen kann.
+    InterpolatedValue applyAdaptiveBrightness(InterpolatedValue val, uint16_t currentTimeMinutes, uint32_t nowMs);
 
-    bool setSummerSetpoint(uint8_t index, const Setpoint& setpoint);
-    void sortSummerSetpoints();
-    void setIsSummer(bool isSummer) { _isSummer = isSummer; }
-    bool isSummer() const { return _isSummer; }
-    
-    /**
-     * @brief Check whether the configured curve can produce valid output
-     */
-    bool isValid() const {
-        switch (_curveType) {
-            case CurveType::Manual:
-            case CurveType::Astronomical:
-                return true;
-            case CurveType::SunPosition:
-            case CurveType::FixedTime:
-            default:
-                return getValidSetpointCount() >= 2;
-        }
-    }
-    
 private:
-    Setpoint _setpoints[MAX_SETPOINTS];
-    Setpoint _setpointsSummer[MAX_SETPOINTS];
-    bool _hasSummerSetpoints;
     bool _isSummer;
-    CurveType _curveType;
-    uint16_t _manualKelvin;
-    uint16_t _appliedKelvin;
-    uint16_t _slewRateKelvinPerMinute;
-    uint32_t _lastSlewUpdateMs;
     uint16_t _sunriseMinutes;
     uint16_t _sunsetMinutes;
     bool _sunTimesValid;
-    int16_t _sunriseOffsetMin;
-    int16_t _sunsetOffsetMin;
     float _latitudeDeg;
     float _longitudeDeg;
     int16_t _timezoneOffsetMin;
-    uint16_t _astroMinKelvin;
-    uint16_t _astroMaxKelvin;
-    uint8_t _astroMinBrightness;
-    uint8_t _astroMaxBrightness;
 
     // --- Adaptive Helligkeit ---
     AdaptiveConfig _adaptiveConfig;
@@ -194,34 +124,10 @@ private:
     uint8_t _lastSentBrightness = 255; // 255 = noch kein Wert gesendet
     float _luxFilterBuffer[3] = {0.0f, 0.0f, 0.0f};
     uint8_t _luxFilterIndex = 0;
-    
-    /**
-     * @brief Linear interpolation between two values
-     */
-    static inline float lerp(float a, float b, float t) {
-        return a + (b - a) * t;
-    }
-    
-    /**
-     * @brief Find the two setpoints to interpolate between
-     * @param currentTime Current time in minutes
-     * @param prevIndex Output: index of previous setpoint
-     * @param nextIndex Output: index of next setpoint
-     * @return true if found, false if not enough setpoints
-     */
-    static uint8_t countValidInArray(const Setpoint* arr);
-    bool findInterpolationPoints(const Setpoint* arr, uint16_t currentTime, uint8_t& prevIndex, uint8_t& nextIndex) const;
-    InterpolatedValue calculateFixedTimeValue(uint16_t currentTimeMinutes) const;
-    InterpolatedValue calculateSunPositionValue(uint16_t currentTimeMinutes) const;
-    InterpolatedValue calculateManualValue(uint16_t currentTimeMinutes) const;
-    InterpolatedValue calculateAstronomicalValue(uint16_t currentTimeMinutes, int16_t dayOfYear) const;
-    void applySlew(uint16_t targetKelvin, uint32_t currentTimeMs);
-    void getSetpointRanges(const Setpoint* arr, uint16_t& minKelvin, uint16_t& maxKelvin, uint8_t& minBrightness, uint8_t& maxBrightness) const;
 
     // --- Adaptive Helligkeit (privat) ---
     bool isSensorValid(uint32_t nowMs) const;
     float getFilteredLux() const;
-    InterpolatedValue applyAdaptiveBrightness(InterpolatedValue val, uint16_t currentTimeMinutes, uint32_t nowMs);
 };
 
 } // namespace HCL

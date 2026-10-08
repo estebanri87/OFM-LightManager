@@ -1,4 +1,4 @@
-﻿### HCL-Adaptive-Staerke
+﻿### HCL-Adaptive-Stärke
 
 *(Nur bei Tageslicht-Kompensation, Open-Loop)*
 

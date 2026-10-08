@@ -25,29 +25,29 @@
               <!-- Master name (text, 20 chars) -->
 
 
-              <!-- Bereitstellung der Lichtmanager-Sollwerte -->
-              <ParameterType Id="%AID%_PT-LMGStatusKoEnable" Name="LMGStatusKoEnable">
-                <TypeRestriction Base="Value" SizeInBit="2" UIHint="DropDown">
-                  <Enumeration Text="Intern" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Extern" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Intern &amp; Extern" Value="2" Id="%ENID%" />
-                </TypeRestriction>
-              </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLEnable" Name="LMGHCLEnable">
                 <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
                   <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
                   <Enumeration Text="Aktiviert" Value="1" Id="%ENID%" />
                 </TypeRestriction>
               </ParameterType>
+              <!-- Kanalanzahl -->
               <ParameterType Id="%AID%_PT-LMGHCLMasterCount" Name="LMGHCLMasterCount">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="%N%" />
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="%N%" maxInclusive="%N%" />
+              </ParameterType>
+              <!-- Kanalaktivität in der Kanalauswahl -->
+              <ParameterType Id="%AID%_PT-LMGChannelActive" Name="LMGChannelActive">
+                <TypeRestriction Base="Value" SizeInBit="1">
+                  <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Aktiviert" Value="1" Id="%ENID%" />
+                </TypeRestriction>
               </ParameterType>
               <!--
                 Public, wiederverwendbarer ParameterType zur Master-Auswahl in
                 Consumer-Modulen (z. B. HueGateway, DALI, MQTT-Bridge).
                 Wertebereich 0..16: 0 = kein Lichtmanager zugeordnet,
-                1..N = Master-Index. Consumer-Module sollten zusätzlich gegen
-                LightManagerModule::getMasterCount() clampen (Laufzeit).
+                1..N = Master-Index. Consumer-Module müssen zur Laufzeit prüfen,
+                ob der Lichtmanager aktiviert ist (LightManagerModule::channel(n) != nullptr).
               -->
               <ParameterType Id="%AID%_PT-LMGMasterSelect" Name="LMGMasterSelect">
                 <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
@@ -94,7 +94,7 @@
                 <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="100" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLUpdateInterval" Name="LMGHCLUpdateInterval">
-                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="30" maxInclusive="3600" />
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="60" maxInclusive="3600" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLFadeDuration" Name="LMGHCLFadeDuration">
                 <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="60" />
@@ -135,16 +135,12 @@
               <ParameterType Id="%AID%_PT-LMGHCLFallbackDurationSec" Name="LMGHCLFallbackDurationSec">
                 <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="65535" />
               </ParameterType>
-              <ParameterType Id="%AID%_PT-LMGHCLCurveType" Name="LMGHCLCurveType">
-                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
-                  <Enumeration Text="Stützpunkte" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Sonnenfenster" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Manuelle Farbtemperatur" Value="2" Id="%ENID%" />
-                  <Enumeration Text="Astronomischer Sonnenstand" Value="3" Id="%ENID%" />
-                </TypeRestriction>
-              </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLSlewRate" Name="LMGHCLSlewRate">
                 <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="5000" />
+              </ParameterType>
+              <!-- Phase 2.I.b: 8-bit %/min for brightness slew (0..100). -->
+              <ParameterType Id="%AID%_PT-LMGHCLSlewRateBrightness" Name="LMGHCLSlewRateBrightness">
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="100" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLOffsetMinutes" Name="LMGHCLOffsetMinutes">
                 <TypeNumber SizeInBit="16" Type="signedInt" minInclusive="-180" maxInclusive="180" />
@@ -152,22 +148,8 @@
               <ParameterType Id="%AID%_PT-LMGHCLMasterName" Name="LMGHCLMasterName">
                 <TypeText SizeInBit="200" />
               </ParameterType>
-              <ParameterType Id="%AID%_PT-LMGHCLSeasonMode" Name="LMGHCLSeasonMode">
-                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
-                  <Enumeration Text="Standard (immer Winter-Profil)" Value="0" Id="%ENID%" />
-                  <Enumeration Text="Automatisch (Sommer/Winterzeit)" Value="1" Id="%ENID%" />
-                  <Enumeration Text="Festes Datum" Value="2" Id="%ENID%" />
-                  <Enumeration Text="Per Kommunikationsobjekt" Value="3" Id="%ENID%" />
-                </TypeRestriction>
-              </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLDSTOffsetDays" Name="LMGHCLDSTOffsetDays">
                 <TypeNumber SizeInBit="8" Type="signedInt" minInclusive="-60" maxInclusive="60" />
-              </ParameterType>
-              <ParameterType Id="%AID%_PT-LMGHCLSummerMonth" Name="LMGHCLSummerMonth">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="12" />
-              </ParameterType>
-              <ParameterType Id="%AID%_PT-LMGHCLSummerDay" Name="LMGHCLSummerDay">
-                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="31" />
               </ParameterType>
               <ParameterType Id="%AID%_PT-LMGHCLAdaptiveMode" Name="LMGHCLAdaptiveMode">
                 <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
@@ -218,6 +200,326 @@
               <ParameterType Id="%AID%_PT-LMGHCLAdaptiveTimeout" Name="LMGHCLAdaptiveTimeout">
                 <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="0" maxInclusive="60" />
               </ParameterType>
+
+              <!-- ============================================================ -->
+              <!-- 0.3.0 NEW ParameterTypes (HCL-Profil-Release)                -->
+              <!-- ============================================================ -->
+
+              <!-- F1: HCL-Achsen (Farbtemperatur / Helligkeit / beides / aus) -->
+              <ParameterType Id="%AID%_PT-LMGHCLAxes" Name="LMGHCLAxes">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Farbtemperatur + Helligkeit" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Nur Farbtemperatur" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Nur Helligkeit" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Aus" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F1: Zeitfenster wann HCL aktiv ist -->
+              <ParameterType Id="%AID%_PT-LMGHCLTimeWindow" Name="LMGHCLTimeWindow">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Immer" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Nur tagsüber" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Nur nachts" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F8: Anker-Typ pro Stützpunkt -->
+              <ParameterType Id="%AID%_PT-LMGAnchorType" Name="LMGAnchorType">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Feste Uhrzeit" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Sonnenaufgang" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Sonnenuntergang" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Bürgerl. Dämmerung Anfang" Value="3" Id="%ENID%" />
+                  <Enumeration Text="Bürgerl. Dämmerung Ende" Value="4" Id="%ENID%" />
+                  <Enumeration Text="Solarer Mittag" Value="5" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F8: Clamp-Modus pro Stützpunkt (nicht vor / nicht nach) -->
+              <ParameterType Id="%AID%_PT-LMGClampMode" Name="LMGClampMode">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Deaktiviert" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Nicht vor" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Nicht nach" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F8: Externe Farbtemperatur-Mode pro Stützpunkt -->
+              <ParameterType Id="%AID%_PT-LMGExtColorTempMode" Name="LMGExtColorTempMode">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Aus" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Immer (übersteuern)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Nur wenn extern größer" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Nur wenn extern kleiner" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F7: Profil-Name (16 Byte UTF-8) -->
+              <ParameterType Id="%AID%_PT-LMGProfileName" Name="LMGProfileName">
+                <TypeText SizeInBit="128" />
+              </ParameterType>
+
+              <!-- F7: Saison-Quelle pro Kanal -->
+              <ParameterType Id="%AID%_PT-LMGSeasonSource" Name="LMGSeasonSource">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Aus" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Automatisch (Astro + Offset)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Festes Datum" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Kommunikationsobjekt" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F7: Saison-Filter pro Profil (Sommer+Winter / Sommer / Winter / Fallback) -->
+              <ParameterType Id="%AID%_PT-LMGSeasonFilter" Name="LMGSeasonFilter">
+                <TypeRestriction Base="Value" SizeInBit="2" UIHint="DropDown">
+                  <Enumeration Text="Sommer + Winter" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Sommer" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Winter" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Fallback" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F7: Saison-Offset in Tagen (#20: erweitert auf +/-90) -->
+              <ParameterType Id="%AID%_PT-LMGSeasonOffsetDays" Name="LMGSeasonOffsetDays">
+                <TypeNumber SizeInBit="8" Type="signedInt" minInclusive="-90" maxInclusive="90" />
+              </ParameterType>
+
+              <!-- F7: Sommer-Beginn/-Ende: Monat (1–12) und Tag (1–31) als je 1 Byte -->
+              <ParameterType Id="%AID%_PT-LMGSeasonMonth" Name="LMGSeasonMonth">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Januar"    Value="1"  Id="%ENID%" />
+                  <Enumeration Text="Februar"   Value="2"  Id="%ENID%" />
+                  <Enumeration Text="März"      Value="3"  Id="%ENID%" />
+                  <Enumeration Text="April"     Value="4"  Id="%ENID%" />
+                  <Enumeration Text="Mai"       Value="5"  Id="%ENID%" />
+                  <Enumeration Text="Juni"      Value="6"  Id="%ENID%" />
+                  <Enumeration Text="Juli"      Value="7"  Id="%ENID%" />
+                  <Enumeration Text="August"    Value="8"  Id="%ENID%" />
+                  <Enumeration Text="September" Value="9"  Id="%ENID%" />
+                  <Enumeration Text="Oktober"   Value="10" Id="%ENID%" />
+                  <Enumeration Text="November"  Value="11" Id="%ENID%" />
+                  <Enumeration Text="Dezember"  Value="12" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="%AID%_PT-LMGSeasonDay" Name="LMGSeasonDay">
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="1" maxInclusive="31" />
+              </ParameterType>
+
+              <!-- F3: Vorausschau-Minuten -->
+              <ParameterType Id="%AID%_PT-LMGHCLLookAheadMinutes" Name="LMGHCLLookAheadMinutes">
+                <TypeNumber SizeInBit="8" Type="unsignedInt" minInclusive="5" maxInclusive="60" />
+              </ParameterType>
+
+              <!-- F4: Tagesphase (DPT-5-10 fortlaufend) -->
+              <ParameterType Id="%AID%_PT-LMGDayPhase" Name="LMGDayPhase">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Nacht" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Morgendämmerung" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Vormittag" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Mittag" Value="3" Id="%ENID%" />
+                  <Enumeration Text="Nachmittag" Value="4" Id="%ENID%" />
+                  <Enumeration Text="Abenddämmerung" Value="5" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F7: Vorbelegung des K04-Saison-Eingangs beim Boot -->
+              <ParameterType Id="%AID%_PT-LMGSummerActiveInit" Name="LMGSummerActiveInit">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Nichts (undefiniert)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Wert vom Bus lesen" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Winter (0)" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Sommer (1)" Value="3" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- Variante E final (#21): Bereitstellung der LMG-Sollwerte -->
+              <ParameterType Id="%AID%_PT-LMGIntegrationMode" Name="LMGIntegrationMode">
+                <TypeRestriction Base="Value" SizeInBit="2" UIHint="DropDown">
+                  <Enumeration Text="Intern" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Extern" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Intern &amp; Extern" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- Variante E final (#21): Welche Status-KOs werden bedient -->
+              <ParameterType Id="%AID%_PT-LMGStatusKoOutput" Name="LMGStatusKoOutput">
+                <TypeRestriction Base="Value" SizeInBit="3" UIHint="DropDown">
+                  <Enumeration Text="Helligkeit + Farbtemperatur (1B + 2B)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Nur Helligkeit (1B)" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Nur Farbtemperatur (2B)" Value="2" Id="%ENID%" />
+                  <Enumeration Text="Nur Kombi (6B DPT-249-600)" Value="3" Id="%ENID%" />
+                  <Enumeration Text="Alle (1B + 2B + 6B parallel)" Value="4" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Profil-Anzahl pro Kanal (1..4) -->
+              <ParameterType Id="%AID%_PT-LMGProfileCount" Name="LMGProfileCount">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="1 Profil" Value="1" Id="%ENID%" />
+                  <Enumeration Text="2 Profile" Value="2" Id="%ENID%" />
+                  <Enumeration Text="3 Profile" Value="3" Id="%ENID%" />
+                  <Enumeration Text="4 Profile" Value="4" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Sperr-Verhalten Toggle -->
+              <ParameterType Id="%AID%_PT-LMGUseLock" Name="LMGUseLock">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Nein" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Vollsperre" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Getrennt (Helligkeit / Farbtemperatur)" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Tag/Nacht-Quelle pro Kanal -->
+              <ParameterType Id="%AID%_PT-LMGDayNightSource" Name="LMGDayNightSource">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Aus" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Kommunikationsobjekt" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Astronomisch intern" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Externe Quelle Modus (Override / Fallback) -->
+              <ParameterType Id="%AID%_PT-LMGExtSource" Name="LMGExtSource">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Nein" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Übersteuerung" Value="1" Id="%ENID%" />
+                  <Enumeration Text="Fallback" Value="2" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Externe Farbtemperatur-DPT -->
+              <ParameterType Id="%AID%_PT-LMGExtColorTempDpt" Name="LMGExtColorTempDpt">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="2 Byte Kelvin (DPST-7-600)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="1 Byte Skalar (DPST-5-6)" Value="1" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Externe Helligkeits-DPT -->
+              <ParameterType Id="%AID%_PT-LMGExtBrightnessDpt" Name="LMGExtBrightnessDpt">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="1 Byte Prozent (DPST-5-1)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="2 Byte Lux (DPST-9-4)" Value="1" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F12: Externe-Quellen-Fallback-Timeout -->
+              <ParameterType Id="%AID%_PT-LMGExtFallbackTimeoutSec" Name="LMGExtFallbackTimeoutSec">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="0" maxInclusive="600" />
+              </ParameterType>
+
+              <!-- L6: Lux-Mapping Skalierungs-Maximum -->
+              <ParameterType Id="%AID%_PT-LMGExtLuxMax" Name="LMGExtLuxMax">
+                <TypeNumber SizeInBit="16" Type="unsignedInt" minInclusive="100" maxInclusive="10000" />
+              </ParameterType>
+
+              <!-- F8: Astro-Quelle Toggle (Automatisch Master-Geo / Manuell Sunrise+Sunset) -->
+              <ParameterType Id="%AID%_PT-LMGAstroSource" Name="LMGAstroSource">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="Automatisch (Master-Geo)" Value="0" Id="%ENID%" />
+                  <Enumeration Text="Manuell (Per-Kanal Sunrise/Sunset)" Value="1" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F8: SP-Anker Stunde 0..23 (1 Byte, DropDown) -->
+              <ParameterType Id="%AID%_PT-LMGHCLHour" Name="LMGHCLHour">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="00" Value="0" Id="%ENID%" />
+                  <Enumeration Text="01" Value="1" Id="%ENID%" />
+                  <Enumeration Text="02" Value="2" Id="%ENID%" />
+                  <Enumeration Text="03" Value="3" Id="%ENID%" />
+                  <Enumeration Text="04" Value="4" Id="%ENID%" />
+                  <Enumeration Text="05" Value="5" Id="%ENID%" />
+                  <Enumeration Text="06" Value="6" Id="%ENID%" />
+                  <Enumeration Text="07" Value="7" Id="%ENID%" />
+                  <Enumeration Text="08" Value="8" Id="%ENID%" />
+                  <Enumeration Text="09" Value="9" Id="%ENID%" />
+                  <Enumeration Text="10" Value="10" Id="%ENID%" />
+                  <Enumeration Text="11" Value="11" Id="%ENID%" />
+                  <Enumeration Text="12" Value="12" Id="%ENID%" />
+                  <Enumeration Text="13" Value="13" Id="%ENID%" />
+                  <Enumeration Text="14" Value="14" Id="%ENID%" />
+                  <Enumeration Text="15" Value="15" Id="%ENID%" />
+                  <Enumeration Text="16" Value="16" Id="%ENID%" />
+                  <Enumeration Text="17" Value="17" Id="%ENID%" />
+                  <Enumeration Text="18" Value="18" Id="%ENID%" />
+                  <Enumeration Text="19" Value="19" Id="%ENID%" />
+                  <Enumeration Text="20" Value="20" Id="%ENID%" />
+                  <Enumeration Text="21" Value="21" Id="%ENID%" />
+                  <Enumeration Text="22" Value="22" Id="%ENID%" />
+                  <Enumeration Text="23" Value="23" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
+              <!-- F8: SP-Anker Minute 0..59 (1 Byte, DropDown) -->
+              <ParameterType Id="%AID%_PT-LMGHCLMinute" Name="LMGHCLMinute">
+                <TypeRestriction Base="Value" SizeInBit="8" UIHint="DropDown">
+                  <Enumeration Text="00" Value="0" Id="%ENID%" />
+                  <Enumeration Text="01" Value="1" Id="%ENID%" />
+                  <Enumeration Text="02" Value="2" Id="%ENID%" />
+                  <Enumeration Text="03" Value="3" Id="%ENID%" />
+                  <Enumeration Text="04" Value="4" Id="%ENID%" />
+                  <Enumeration Text="05" Value="5" Id="%ENID%" />
+                  <Enumeration Text="06" Value="6" Id="%ENID%" />
+                  <Enumeration Text="07" Value="7" Id="%ENID%" />
+                  <Enumeration Text="08" Value="8" Id="%ENID%" />
+                  <Enumeration Text="09" Value="9" Id="%ENID%" />
+                  <Enumeration Text="10" Value="10" Id="%ENID%" />
+                  <Enumeration Text="11" Value="11" Id="%ENID%" />
+                  <Enumeration Text="12" Value="12" Id="%ENID%" />
+                  <Enumeration Text="13" Value="13" Id="%ENID%" />
+                  <Enumeration Text="14" Value="14" Id="%ENID%" />
+                  <Enumeration Text="15" Value="15" Id="%ENID%" />
+                  <Enumeration Text="16" Value="16" Id="%ENID%" />
+                  <Enumeration Text="17" Value="17" Id="%ENID%" />
+                  <Enumeration Text="18" Value="18" Id="%ENID%" />
+                  <Enumeration Text="19" Value="19" Id="%ENID%" />
+                  <Enumeration Text="20" Value="20" Id="%ENID%" />
+                  <Enumeration Text="21" Value="21" Id="%ENID%" />
+                  <Enumeration Text="22" Value="22" Id="%ENID%" />
+                  <Enumeration Text="23" Value="23" Id="%ENID%" />
+                  <Enumeration Text="24" Value="24" Id="%ENID%" />
+                  <Enumeration Text="25" Value="25" Id="%ENID%" />
+                  <Enumeration Text="26" Value="26" Id="%ENID%" />
+                  <Enumeration Text="27" Value="27" Id="%ENID%" />
+                  <Enumeration Text="28" Value="28" Id="%ENID%" />
+                  <Enumeration Text="29" Value="29" Id="%ENID%" />
+                  <Enumeration Text="30" Value="30" Id="%ENID%" />
+                  <Enumeration Text="31" Value="31" Id="%ENID%" />
+                  <Enumeration Text="32" Value="32" Id="%ENID%" />
+                  <Enumeration Text="33" Value="33" Id="%ENID%" />
+                  <Enumeration Text="34" Value="34" Id="%ENID%" />
+                  <Enumeration Text="35" Value="35" Id="%ENID%" />
+                  <Enumeration Text="36" Value="36" Id="%ENID%" />
+                  <Enumeration Text="37" Value="37" Id="%ENID%" />
+                  <Enumeration Text="38" Value="38" Id="%ENID%" />
+                  <Enumeration Text="39" Value="39" Id="%ENID%" />
+                  <Enumeration Text="40" Value="40" Id="%ENID%" />
+                  <Enumeration Text="41" Value="41" Id="%ENID%" />
+                  <Enumeration Text="42" Value="42" Id="%ENID%" />
+                  <Enumeration Text="43" Value="43" Id="%ENID%" />
+                  <Enumeration Text="44" Value="44" Id="%ENID%" />
+                  <Enumeration Text="45" Value="45" Id="%ENID%" />
+                  <Enumeration Text="46" Value="46" Id="%ENID%" />
+                  <Enumeration Text="47" Value="47" Id="%ENID%" />
+                  <Enumeration Text="48" Value="48" Id="%ENID%" />
+                  <Enumeration Text="49" Value="49" Id="%ENID%" />
+                  <Enumeration Text="50" Value="50" Id="%ENID%" />
+                  <Enumeration Text="51" Value="51" Id="%ENID%" />
+                  <Enumeration Text="52" Value="52" Id="%ENID%" />
+                  <Enumeration Text="53" Value="53" Id="%ENID%" />
+                  <Enumeration Text="54" Value="54" Id="%ENID%" />
+                  <Enumeration Text="55" Value="55" Id="%ENID%" />
+                  <Enumeration Text="56" Value="56" Id="%ENID%" />
+                  <Enumeration Text="57" Value="57" Id="%ENID%" />
+                  <Enumeration Text="58" Value="58" Id="%ENID%" />
+                  <Enumeration Text="59" Value="59" Id="%ENID%" />
+                </TypeRestriction>
+              </ParameterType>
+
             </ParameterTypes>
 
             <Parameters>
@@ -225,13 +527,14 @@
               <Parameter Id="%AID%_P-%TT%00010" Name="LMGHCLEnable" ParameterType="%AID%_PT-LMGHCLEnable" Text="Lichtmanager" Value="1">
                 <Memory CodeSegment="%MID%" Offset="31" BitOffset="0" />
               </Parameter>
-              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Verfügbare Kanäle" Value="4" SuffixText=" von %N%">
+              <Parameter Id="%AID%_P-%TT%00011" Name="LMGHCLMasterCount" ParameterType="%AID%_PT-LMGHCLMasterCount" Text="Verfügbare Kanäle" Value="%N%" Access="None">
                 <Memory CodeSegment="%MID%" Offset="32" BitOffset="0" />
               </Parameter>
-              <Parameter Id="%AID%_P-%TT%00012" Name="LMGHCLUpdateInterval" ParameterType="%AID%_PT-LMGHCLUpdateInterval" Text="Aktualisierungsintervall" Value="60" SuffixText=" s">
+              <!-- Reserviert: ehemals globale Aktualisierungsintervall/Überblendzeit, ab v0.6 pro Kanal (CH%C%UpdateInterval / CH%C%FadeDuration). Memory-Slot beibehalten für Layout-Kompatibilität. -->
+              <Parameter Id="%AID%_P-%TT%00012" Name="LMGHCLUpdateInterval" ParameterType="%AID%_PT-LMGHCLUpdateInterval" Text="Aktualisierungsintervall (legacy)" Value="60" SuffixText=" s" Access="None">
                 <Memory CodeSegment="%MID%" Offset="33" BitOffset="0" />
               </Parameter>
-              <Parameter Id="%AID%_P-%TT%00013" Name="LMGHCLFadeDuration" ParameterType="%AID%_PT-LMGHCLFadeDuration" Text="Überblendzeit" Value="6" SuffixText=" s">
+              <Parameter Id="%AID%_P-%TT%00013" Name="LMGHCLFadeDuration" ParameterType="%AID%_PT-LMGHCLFadeDuration" Text="Überblendzeit (legacy)" Value="6" SuffixText=" s" Access="None">
                 <Memory CodeSegment="%MID%" Offset="35" BitOffset="0" />
               </Parameter>
               <Parameter Id="%AID%_P-%TT%00014" Name="LMGHCLLockFallback" ParameterType="%AID%_PT-LMGHCLLockFallback" Text="Rückfallzeit nach Sperre" Value="0">
@@ -246,6 +549,13 @@
               <Parameter Id="%AID%_P-%TT%00044" Name="LMGHCLFallbackReleaseTime" ParameterType="%AID%_PT-LMGHCLTime" Text="Rückfall-Uhrzeit" Value="180">
                 <Memory CodeSegment="%MID%" Offset="1043" BitOffset="0" />
               </Parameter>
+              <!-- 0.3.0 D2: Master Sommer-Hybrid (F7 Q5) -->
+              <Parameter Id="%AID%_P-%TT%00015" Name="LMGSummerActiveInit" ParameterType="%AID%_PT-LMGSummerActiveInit" Text="Falls Vorbelegung aus dem Speicher nicht möglich oder nicht gewünscht, dann vorbelegen mit" Value="0">
+                <Memory CodeSegment="%MID%" Offset="1045" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="%AID%_P-%TT%00016" Name="LMGSummerActiveSavePower" ParameterType="%AID%_PT-OnOffYesNo" Text="Saisonalen Zustand speichern und beim nächsten Neustart als Vorbelegung nutzen?" Value="0">
+                <Memory CodeSegment="%MID%" Offset="1046" BitOffset="0" />
+              </Parameter>
             </Parameters>
 
             <ParameterRefs>
@@ -257,6 +567,8 @@
               <ParameterRef Id="%AID%_P-%TT%00042_R-%TT%0004201" RefId="%AID%_P-%TT%00042" />
               <ParameterRef Id="%AID%_P-%TT%00043_R-%TT%0004301" RefId="%AID%_P-%TT%00043" />
               <ParameterRef Id="%AID%_P-%TT%00044_R-%TT%0004401" RefId="%AID%_P-%TT%00044" />
+              <ParameterRef Id="%AID%_P-%TT%00015_R-%TT%0001501" RefId="%AID%_P-%TT%00015" />
+              <ParameterRef Id="%AID%_P-%TT%00016_R-%TT%0001601" RefId="%AID%_P-%TT%00016" />
             </ParameterRefs>
 
             <ComObjectTable>
@@ -280,17 +592,10 @@
                 <ParameterSeparator Id="%AID%_PS-LMGHead" Text="Lichtmanager" UIHint="Headline" />
                 <ParameterSeparator Id="%AID%_PS-LMGVer" Text="Version: %ModuleVersion%" />
                 <ParameterSeparator Id="%AID%_PS-LMGRule1" Text="" UIHint="HorizontalRuler" />
-                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Kanalauswahl" UIHint="Headline" />
+                <ParameterSeparator Id="%AID%_PS-LMGHCL" Text="Lichtmanager" UIHint="Headline" />
                 <ParameterRefRef RefId="%AID%_P-%TT%00010_R-%TT%0001001" HelpContext="LMG-Lichtmanager" />
                 <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
                   <when test="1">
-                    <ParameterRefRef RefId="%AID%_P-%TT%00011_R-%TT%0001101" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
-
-                    <ParameterSeparator Id="%AID%_PS-LMGRule2" Text="" UIHint="HorizontalRuler" />
-                    <ParameterSeparator Id="%AID%_PS-LMGSettings" Text="Einstellungen" UIHint="Headline" />
-                    <ParameterRefRef RefId="%AID%_P-%TT%00012_R-%TT%0001201" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
-                    <ParameterRefRef RefId="%AID%_P-%TT%00013_R-%TT%0001301" IndentLevel="1" HelpContext="LMG-Lichtmanager" />
-
                     <ParameterSeparator Id="%AID%_PS-LMGHCLLockLine" Text="" UIHint="HorizontalRuler" />
                     <ParameterSeparator Id="%AID%_PS-LMGHCLLockHead" Text="Lichtmanager Sperre (global)" UIHint="Headline" />
                     <ComObjectRefRef RefId="%AID%_O-%TT%00003_R-%TT%0000301" />
@@ -298,24 +603,57 @@
                     <ComObjectRefRef RefId="%AID%_O-%TT%00037_R-%TT%0003701" />
                     <ParameterRefRef RefId="%AID%_P-%TT%00042_R-%TT%0004201" IndentLevel="1" HelpContext="LMG-HCL-Sperre-global" />
                     <choose ParamRefId="%AID%_P-%TT%00042_R-%TT%0004201">
-                      <when test="2">
+                      <when test="0">
+                        <ParameterRefRef RefId="%AID%_P-%TT%00014_R-%TT%0001401" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
+                      </when>
+                      <when test="1">
                         <ParameterRefRef RefId="%AID%_P-%TT%00043_R-%TT%0004301" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
                       </when>
+                      <when test="2">
+                        <ParameterRefRef RefId="%AID%_P-%TT%00044_R-%TT%0004401" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
+                      </when>
                       <when test="3">
+                        <ParameterRefRef RefId="%AID%_P-%TT%00043_R-%TT%0004301" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
                         <ParameterRefRef RefId="%AID%_P-%TT%00044_R-%TT%0004401" IndentLevel="2" HelpContext="LMG-HCL-Sperre-global" />
                       </when>
                     </choose>
-                    <ParameterRefRef RefId="%AID%_P-%TT%00014_R-%TT%0001401" IndentLevel="1" HelpContext="LMG-HCL-Sperre-global" />
+
+                    <ParameterSeparator Id="%AID%_PS-LMGSummerLine" Text="" UIHint="HorizontalRuler" />
+                    <ParameterSeparator Id="%AID%_PS-LMGSummerHead" Text="Saisonale Umschaltung (global)" UIHint="Headline" />
+                    <ParameterSeparator Id="%AID%_PS-LMGSummerHint" Text="Diese Einstellungen gelten global für alle Kanäle. Die saisonale Umschaltung (Sommer / Winter) muss zusätzlich in den jeweiligen Kanal-Einstellungen aktiviert werden." UIHint="Information" />
+                    <ParameterRefRef RefId="%AID%_P-%TT%00016_R-%TT%0001601" IndentLevel="1" HelpContext="LMG-Allgemein" />
+                    <choose ParamRefId="%AID%_P-%TT%00016_R-%TT%0001601">
+                      <when test="1">
+                        <ParameterRefRef RefId="%AID%_P-%TT%00015_R-%TT%0001501" IndentLevel="2" HelpContext="LMG-Allgemein" />
+                      </when>
+                    </choose>
                   </when>
                 </choose>
               </ParameterBlock>
 
-              <!-- LM-Channel-Template einbinden (LM1..LM16 als Unterbloecke innerhalb Lichtmanager) -->
-              <!-- Nur sichtbar wenn Lichtmanager aktiviert (LMGHCLEnable=1); pro-Channel-Sichtbarkeit -->
-              <!-- erfolgt im templ.xml via choose(LMGHCLMasterCount >= %C%) -->
+              <!-- Kanalauswahl und Kanalseiten (LM1..LM16) nur bei aktiviertem Lichtmanager (LMGHCLEnable=1) -->
               <choose ParamRefId="%AID%_P-%TT%00010_R-%TT%0001001">
                 <when test="1">
-                  <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/*" type="template" prefix="LMG" IsInner="true" />
+                  <!-- Kanalauswahl: je Kanal eine einzeilige Tabelle (OpenKNX-Standard) -->
+                  <ParameterBlock Id="%AID%_PB-LMGChannelSelect" Name="LMGChannelSelect" Text="Kanalauswahl" Icon="format-list-bulleted-type" HelpContext="BASE-ChannelSelect">
+                    <ParameterBlock Id="%AID%_PB-LMGChannelSelectHead" Inline="true" Layout="Grid">
+                      <Rows>
+                        <Row Id="%AID%_PB-LMGChannelSelectHead_R-1" />
+                      </Rows>
+                      <Columns>
+                        <Column Id="%AID%_PB-LMGChannelSelectHead_C-1" Width="10%" />
+                        <Column Id="%AID%_PB-LMGChannelSelectHead_C-2" Width="35%" />
+                        <Column Id="%AID%_PB-LMGChannelSelectHead_C-3" Width="55%" />
+                      </Columns>
+                      <ParameterSeparator Id="%AID%_PS-LMGChannelSelectHead1" Cell="1,1" UIHint="Headline" Text="Kanal" />
+                      <ParameterSeparator Id="%AID%_PS-LMGChannelSelectHead2" Cell="1,2" UIHint="Headline" Text="Kanalaktivität" />
+                      <ParameterSeparator Id="%AID%_PS-LMGChannelSelectHead3" Cell="1,3" UIHint="Headline" Text="Beschreibung" />
+                    </ParameterBlock>
+                    <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/ParameterBlock[@Name='Settings']/*" type="template" prefix="LMG" IsInner="true" />
+                  </ParameterBlock>
+
+                  <!-- Kanalseiten (nur aktivierte Kanäle) -->
+                  <op:include href="LightManagerModule.templ.xml" xpath="//Dynamic/ChannelIndependentBlock/ParameterBlock[@Name='Channel']/*" type="template" prefix="LMG" IsInner="true" />
                 </when>
               </choose>
 

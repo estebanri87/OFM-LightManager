@@ -2,12 +2,13 @@
 
 ### Lichtmanager-Parameter oder HCL-KOs fehlen
 - Lichtmanager global aktiviert?
-- Anzahl Lichtmanager in **Lichtmanager Auswahl** ausreichend?
+- Lichtmanager in der **Kanalauswahl** aktiviert?
 - Erst nach Aktivierung des globalen Lichtmanagers werden Zuordnung und Sperrparameter sichtbar.
 
 ### Lichtmanager wirkt nicht
 - Lichtmanager global aktiviert?
 - Manager im Konsumenten-Modul zugewiesen?
+- Manager in der **Kanalauswahl** aktiviert und nicht **Suspendiert**?
 - Bei `FixedTime`/`SunPosition`: mind. 2 gültige Stützpunkte?
 - Bei `Manual`: gewünschte manuelle Farbtemperatur gesetzt und optionaler Helligkeitsverlauf passend parametriert?
 - Bei `Astronomischer Sonnenstand`: sinnvolle Astro-Min/Max-Werte gesetzt?

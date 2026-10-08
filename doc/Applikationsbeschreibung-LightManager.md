@@ -23,7 +23,7 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 ## Inhaltsverzeichnis
 
 - [Human Centric Lighting](#human-centric-lighting)
-- [Lichtmanager Auswahl](#lichtmanager-auswahl)
+- [Kanalauswahl](#kanalauswahl)
 - [Einstellungen](#einstellungen)
 - [Sperre (global)](#sperre-global)
 - [Rückfallstrategie nach Sperre](#rückfallstrategie-nach-sperre)
@@ -32,6 +32,18 @@ Das Modul übernimmt die Berechnung der HCL-Sollwerte:
 - [Saison-Profil](#saison-profil)
 - [Adaptive Helligkeit](#adaptive-helligkeit)
 - [Kommunikationsobjekte](#kommunikationsobjekte)
+- [HCL-Achsen (F1)](#hcl-achsen-f1)
+- [HCL-Zeitfenster (F1)](#hcl-zeitfenster-f1)
+- [HCL-Vorausschau (F3)](#hcl-vorausschau-f3)
+- [HCL-Fortschritt (F4)](#hcl-fortschritt-f4)
+- [HCL-Slewrate Tag/Nacht (F5)](#hcl-slewrate-tagnacht-f5-per-kanal)
+- [HCL-Profile (F7)](#hcl-profile-f7)
+- [HCL-Stützpunkte (F8)](#hcl-stützpunkte-f8)
+- [Per-Kanal-Sperre (F2)](#per-kanal-sperre-f2)
+- [Rückfallstrategie nach Per-Kanal-Sperre](#rückfallstrategie-nach-per-kanal-sperre)
+- [Externe Eingänge (F12)](#externe-eingänge-f12)
+- [Migration auf 0.4.0](#migration-auf-040)
+- [Migration auf 0.3.0](#migration-auf-030)
 - [Häufige Fehler und Lösungen](#häufige-fehler-und-lösungen)
 
 <!-- DOC -->
@@ -47,18 +59,24 @@ Bis zu N unabhängige Lichtmanager (Anzahl per OAM vorgegeben) berechnen Helligk
 Jeder Lichtmanager besitzt eine eigene Kurvenkonfiguration, optionale Saison-Profile und optionale adaptive Helligkeitsregelung.
 <!-- DOCEND -->
 
-<!-- DOC HelpContext="Lichtmanager-Auswahl" -->
-### Lichtmanager Auswahl
+<!-- DOC -->
+### Kanalauswahl
 
-Legt die Anzahl sichtbarer Lichtmanager-Seiten (1..N, max. durch OAM vorgegeben) fest.
-Nur die hier aktivierten Lichtmanager werden als eigene ETS-Reiter eingeblendet.
+Bei aktiviertem Lichtmanager erscheint unter „Allgemein" der Tab **Kanalauswahl**. Er enthält je Lichtmanager eine Zeile mit den Spalten **Kanal**, **Kanalaktivität** und **Beschreibung**.
+Nur aktivierte Lichtmanager erscheinen als eigener Tab „LM x" im Baum und werden in der Firmware ausgeführt. Die Beschreibung kann auch bei deaktivierten Lichtmanagern eingetragen werden.
+
+<!-- DOC HelpContext="Kanalaktivitaet" -->
+#### Kanalaktivität
+
+Schaltet den Lichtmanager ein (**Aktiviert**) oder aus (**Deaktiviert**).
+Ein deaktivierter Lichtmanager wird im Baum ausgeblendet, liefert keine Sollwerte und kann in Konsumenten-Modulen (z. B. OFM-HueGatewayModule) nicht zugeordnet werden. Seine Einstellungen bleiben erhalten.
+Zum vorübergehenden Abschalten ohne Ausblenden dient **Suspendiert** im Kanalkopf.
 <!-- DOCEND -->
 
 <!-- DOC -->
 ### Einstellungen
 
-- **Aktualisierungsintervall (Sekunden)**
-- **Überblendzeit (Sekunden)**
+Ab Version 0.2 sind **Aktualisierungsintervall** und Überblendzeit pro Kanal konfigurierbar (siehe Abschnitt [Status-KOs je Lichtmanager](#status-kos-je-lichtmanager)). Die früheren globalen Parameter bleiben aus Speichergründen im Projekt bestehen, werden aber nicht mehr ausgewertet.
 
 Sollwerte werden aus der Lichtmanager-Kurve berechnet und bei Wertänderung als Status-KO übertragen.
 
@@ -121,13 +139,116 @@ Hinweis:
 <!-- DOC -->
 ### Status-KOs je Lichtmanager
 
-Aktiviert pro Manager die Ausgabe:
-- `Status Helligkeit Soll` (`1 Byte`, `0..100 %`)
-- `Status Farbtemperatur Soll` (`2 Byte`, `2000..6500 K`)
+Jeder Kanal kann seine berechneten Sollwerte intern an angeschlossene Module (z. B. Hue-Gateway) und/oder als KNX-Status-KOs ausgeben. Datentyp und Timing werden pro Kanal konfiguriert.
 
-Hinweise:
-- Die Ausgabe erfolgt zyklisch gemäß **Aktualisierungsintervall** des Lichtmanager-Bereichs.
-- Die KOs liefern die vom Lichtmanager berechneten Sollwerte, unabhängig davon, wie viele Konsumenten diesem zugeordnet sind.
+<!-- DOC HelpContext="HCL-Kanal-Ausgabe-Verwendung" -->
+#### Ausgabe verwenden
+
+Legt fest, wohin der Lichtmanager-Kanal seine berechneten Sollwerte sendet:
+
+- **Intern** – Der Kanal wird ausschließlich von internen Verbrauchern gelesen (z. B. Hue-Gateway-Modul). Es werden keine Status-KOs auf den KNX-Bus gesendet.
+- **Extern** – Der Kanal sendet Sollwerte über die Status-KOs auf den KNX-Bus. Interne Verbraucher werden **nicht** beliefert.
+- **Beides** – Der Kanal beliefert interne Verbraucher *und* sendet zusätzlich die Status-KOs auf den KNX-Bus.
+
+Bei `Intern` bleiben die zugehörigen Status-KOs deaktiviert und belegen keine Gruppenadresse.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-Ausgabe-Erweitert" -->
+#### Status-KOs zusätzlich aktivieren
+
+Nur sichtbar bei Verwendung `Intern`.
+
+Wird diese Option gesetzt, werden die Status-KOs zusätzlich auf den KNX-Bus gesendet, obwohl der Kanal eigentlich nur intern arbeitet. Damit lassen sich Helligkeit, Farbtemperatur oder der kombinierte DPT 249.600-Wert zur Visualisierung oder Protokollierung mitlesen, ohne die interne Ausgabe zu unterbrechen.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-Ausgabe-Datentyp" -->
+#### Datentyp der Status-Ausgabe
+
+Bestimmt, welche KNX-Status-KOs der Kanal verwendet:
+
+- **Helligkeit + Farbtemperatur** – Zwei separate KOs:
+  - `Status Helligkeit Soll` (`DPT 5.001`, 1 Byte, 0..100 %)
+  - `Status Farbtemperatur Soll` (`DPT 7.600`, 2 Byte, K)
+- **Kombiniert (DPT 249.600)** – Ein einzelnes 6-Byte-KO `Status Tunable White kombiniert` mit Helligkeit, Farbtemperatur und Überblendzeit in einem Telegramm.
+- **Beides** – Sowohl die separaten KOs *als auch* das kombinierte DPT 249.600-KO werden gesendet.
+
+Hinweis: Die separaten KOs nutzen die in den Aktoren konfigurierte Überblendzeit; das kombinierte KO 249.600 enthält die Überblendzeit als Telegrammbestandteil.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-Aktualisierungsintervall" -->
+#### Aktualisierungsintervall
+
+Zeitlicher Abstand, in dem der Kanal seine berechneten Sollwerte erneut auswertet und – bei Wertänderung oder Ablauf des Intervalls – sendet.
+
+- Bereich: **60 .. 3600 s** (1 Minute bis 1 Stunde)
+- Standard: **60 s**
+
+Empfehlung: 60–300 s ist für Wohnbereiche meist ausreichend. Sehr kurze Intervalle (< 60 s) sind nicht zulässig, um Busbelastung und Aktor-Logging zu schonen.
+
+Hinweis: Wertänderungen, die durch HCL-Kurvenpunkte oder externe Eingriffe entstehen, werden auch zwischen den Zyklen sofort gesendet, wenn sie sich vom zuletzt gesendeten Wert unterscheiden.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-Ueberblendzeit" -->
+#### Überblendzeit
+
+Zeit, in der ein Aktor von seinem aktuellen Wert auf den neuen HCL-Sollwert überblenden soll.
+
+- Bereich: **1 .. 60 s**
+- Standard: **6 s**
+
+Verwendung je nach Datentyp:
+
+- **Helligkeit + Farbtemperatur** – Die Überblendzeit wird *nicht* mitgesendet; verwendet wird die im Aktor projektierte Überblendzeit. Der Wert dient hier nur internen Verbrauchern (z. B. Hue-Gateway).
+- **Kombiniert (DPT 249.600)** – Die Überblendzeit ist Teil des 6-Byte-Telegramms und wird vom Aktor unmittelbar verwendet.
+- **Beides** – wirkt wie oben kombiniert.
+
+Empfehlung: Werte zwischen 2 und 10 s vermeiden sichtbares „Springen“ und sind für Wohnräume angenehm.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-StatusBrightness" -->
+#### KO Status-Soll-Helligkeit
+
+`DPT 5.001`, 1 Byte, 0…00 %.
+
+Aktiv wenn **Ausgabe verwenden** = `Extern` oder `Beides`, und **Datentyp** = `Helligkeit + Farbtemperatur` oder `Beides`.
+
+Der Kanal sendet den berechneten Helligkeits-Sollwert zyklisch gemäß **Aktualisierungsintervall** sowie sofort bei geändertem Wert.
+
+Hinweis: Die Überblendzeit ist in diesem KO nicht enthalten — für weiche Übergänge im Aktor die **Slew-Rate** des Lichtmanagers verwenden oder das kombinierte DPT 249.600-KO nutzen.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-StatusColorTemp" -->
+#### KO Status-Soll-Farbtemperatur
+
+`DPT 7.600`, 2 Byte, Kelvin (typisch 2000–6500 K).
+
+Aktiv wenn **Ausgabe verwenden** = `Extern` oder `Beides`, und **Datentyp** = `Helligkeit + Farbtemperatur` oder `Beides`.
+
+Der Kanal sendet den berechneten Farbtemperatur-Sollwert zyklisch gemäß **Aktualisierungsintervall** sowie sofort bei geändertem Wert.
+
+Hinweis: Beide KOs (Helligkeit + Farbtemperatur) werden stets gemeinsam gesendet, auch wenn sich nur ein Wert geändert hat.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Kanal-StatusCombined" -->
+#### KO Status-Soll Kombi (DPT 249.600)
+
+`DPT 249.600` (`DPST-249-600`), 6 Byte, Tunable White kombiniert.
+
+Aktiv wenn **Ausgabe verwenden** = `Extern` oder `Beides`, und **Datentyp** = `Kombiniert (DPT 249.600)` oder `Beides`.
+
+**Telegrammaufbau (Big-Endian, 6 Byte)**:
+
+| Byte | Inhalt | DPT | Wert |
+|---|---|---|---|
+| 0–1 | Übergangszeit | DPT 7.004 (100-ms-Einheiten) | `Überblendzeit × 10` |
+| 2–3 | Farbtemperatur | DPT 7.600 (Kelvin) | berechneter HCL-Sollwert |
+| 4 | Helligkeit | DPT 5.001 skaliert (0–255) | `Helligkeit% × 255 / 100` |
+| 5 | Maskierung | B8 | `0x07` (alle drei Validity-Bits gesetzt) |
+
+Die Maskierung `0x07` bedeutet: Validity-Bit für Übergangszeit (b2), Farbtemperatur (b1) und Helligkeit (b0) sind alle gesetzt — der Empfänger soll alle drei Felder auswerten.
+
+**Empfehlung MDT AKD LED Controller**: Objekt 77 (`Tunable White combined`) mit diesem KO verbinden, **Datentyp** = `Kombiniert` oder `Beides` wählen, **Überblendzeit** ≈ **Aktualisierungsintervall** oder kleiner für fließende Übergänge ohne sichtbare Stufen.
+<!-- DOCEND -->
 
 <!-- DOC -->
 ### Lichtmanager 1..N
@@ -135,7 +256,8 @@ Hinweise:
 <!-- DOC HelpContext="HCL-Manager-18" -->
 Jeder Lichtmanager 1..N besitzt identischen Aufbau (HCL-Konfiguration):
 
-- **Bezeichnung**: Freie ETS-Bezeichnung des Lichtmanagers.
+- **Beschreibung**: Freie ETS-Bezeichnung des Lichtmanagers (auch in der Kanalauswahl editierbar).
+- **Suspendiert**: Der Lichtmanager bleibt projektiert, wird aber nicht ausgeführt.
 - **Lichtmanager Sperre (spezifisch)**: Sperrt nur den jeweiligen Manager.
 - **Erweiterte Kurve**: Kurventyp `FixedTime`, `SunPosition`, `Manual` oder `Astronomischer Sonnenstand`.
 - **Stützpunkte**: Bis zu 10 Stützpunkte je Manager (bei `FixedTime` oder `SunPosition`).
@@ -145,8 +267,11 @@ Jeder Lichtmanager 1..N besitzt identischen Aufbau (HCL-Konfiguration):
 
 Jeder Manager besitzt identischen Aufbau:
 
-#### Bezeichnung
-Freie ETS-Bezeichnung des Lichtmanagers.
+#### Beschreibung
+Freie ETS-Bezeichnung des Lichtmanagers. Sie erscheint im Tab-Namen und in den KO-Texten.
+
+#### Suspendiert
+Der Lichtmanager bleibt projektiert und sichtbar, wird aber von der Firmware nicht ausgeführt (keine Sollwerte, keine KOs). Im Baum wird er als suspendiert markiert.
 
 #### Lichtmanager Sperre (spezifisch)
 Sperrt nur den jeweiligen Lichtmanager.
@@ -205,6 +330,10 @@ Beispiel:
 
 Praxisregel:
 - `Aktualisierungsintervall`, `Überblendzeit` und `Slew-Rate` gemeinsam abstimmen, damit Übergänge ruhig bleiben.
+- Throttle-Semantik (Variante A): Während des Aktualisierungsintervalls werden keine Zwischenwerte gesendet. Nach Ablauf des Intervalls wird der **dann aktuelle** Sollwert gesendet, auch wenn er sich zwischenzeitlich wieder dem zuletzt gesendeten Wert angeglichen hat.
+- Bei `Datentyp = Kombiniert (DPT 249.600)` übernimmt der Aktor die Überblendzeit direkt aus dem Telegramm — Slew-Rate und Einzel-KOs werden in diesem Fall nicht benötigt.
+- Empfehlung: `Überblendzeit ≤ Aktualisierungsintervall`, sonst läuft ein noch aktiver Überblendvorgang in den nächsten Sollwert hinein.
+- Empfehlung MDT AKD: `Datentyp = Alle`, `Überblendzeit = 6–30 s`, `Slew-Rate = 0` (der Aktor übernimmt die Glättung).
 
 ### Saison-Profil
 
@@ -284,6 +413,7 @@ Wählt den Betriebsmodus der adaptiven Helligkeitsregelung:
 - **Tageslicht-Kompensation (Open-Loop)**: Der Sensor misst das aktuelle Umgebungslicht (Lux). Dieses wird vom HCL-Sollwert abgezogen: viel Tageslicht → Kunstlicht wird reduziert, wenig Tageslicht → Kunstlicht bleibt hoch. Es gibt keine Rückkopplung — der berechnete Wert wird direkt ausgegeben, ohne zu prüfen ob das Ergebnis wirklich stimmt. Das macht den Modus einfach, stabil und für die meisten Räume ausreichend.
 - **Konstantlichtregelung (Closed-Loop)**: Der Regler vergleicht den aktuellen Sensorwert laufend mit dem HCL-Sollwert und passt die Leuchten so lange nach, bis beide übereinstimmen. Im Gegensatz zu Open-Loop wird also nicht einmalig berechnet sondern fortlaufend korrigiert. Das ergibt eine präzisere Regelung, erfordert aber sorgfältige Parametrierung (Kp, Totband) damit der Regler nicht schwingt. Empfohlen für Bereiche mit genauer Beleuchtungsanforderung.
 <!-- DOCEND -->
+
 
 #### Aktivierung
 
@@ -446,36 +576,246 @@ Globale Sperre inkl. Statusrückmeldung.
 
 #### Sperre Lichtmanager 1..N / Status
 Lichtmanager-spezifische Sperrobjekte inkl. Statusrückmeldung.
-Sichtbarkeit abhängig von der konfigurierten Anzahl Lichtmanager.
+Sichtbar nur für Lichtmanager, die in der **Kanalauswahl** aktiviert sind.
 
 #### Lichtmanager Status Helligkeit Soll / Farbtemperatur Soll
 Je Lichtmanager zwei Sollwert-KOs; Sichtbarkeit abhängig von Option **Status-KOs je Lichtmanager**.
 
 ### Pro-Lichtmanager Kommunikationsobjekte
 
-#### LM x: Sommer aktiv
-1-Bit Eingang (DPT 1.001). Nur sichtbar bei Saison-Modus **Per Objekt**. Zustand wird im Flash persistiert.
+#### LM x: Sommer aktiv (K04)
+1-Bit Eingang (DPT 1.001). Nur sichtbar bei `SeasonSource = Per KO`. Zustand wird im Flash persistiert.
 
 #### Helligkeitssensor (Lux)
 2-Byte Eingang (DPT 9.004). Eingang für die adaptive Helligkeitsregelung.
 
-#### Tag/Nacht
-1-Bit Eingang (DPT 1.001). Nur sichtbar bei Aktivierung der adaptiven Regelung = „Nur tagsüber (per KO)".
+#### Tag/Nacht (K06)
+1-Bit Eingang (DPT 1.001). Nur sichtbar bei `DayNightSource = KO` (Adaptive Helligkeit oder Slew Tag/Nacht).
 
 #### Adaptive Helligkeit aktiv
 1-Bit Ausgang (DPT 1.011). Status der adaptiven Regelung.
+
+### Pro-Kanal Kommunikationsobjekte (0.3.0)
+
+| KO | Nr. | DPT | Funktion | Bedingung |
+|---|---|---|---|---|
+| Sperre | K02 | DPST-1-3 | Vollsperre Ein/Aus | `UseLock ≠ Nein` |
+| Status Sperre | K03 | DPST-1-11 | Status der Kanalsperre | `UseLock ≠ Nein` |
+| Status Tunable White kombiniert | K08 | DPST-249-600 | Helligkeit + CT + Überblendzeit | `StatusKoOutput` inkl. Kombiniert |
+| LockColor | K09 | DPST-1-3 | Farbtemperatur-Achse sperren | `UseLock = Getrennt` |
+| LockBrightness | K10 | DPST-1-3 | Helligkeits-Achse sperren | `UseLock = Getrennt` |
+| Minuten bis nächstem SP | K11 | DPT 7.006 | Vorausschau: Minuten | `PreviewEnable = Ja` |
+| Nächste Farbtemperatur | K12 | DPT 7.600 | Vorausschau: CT des nächsten SP | `PreviewEnable = Ja` |
+| Nächste Helligkeit | K13 | DPT 5.001 | Vorausschau: Helligkeit des nächsten SP | `PreviewEnable = Ja` |
+| Tagesfortschritt | K14 | DPT 5.001 | 0–100 % des Tagesverlaufs | `ProgressEnable = Ja` |
+| Tagesphase | K15 | DPT 5.010 | 0=vor Aufgang … 5=Nacht | `ProgressEnable = Ja` |
+| Externe Helligkeit (%) | K16 | DPT 5.001 | Externe Helligkeitsquelle | `ExtBrightnessDpt = Prozent` |
+| Externe Helligkeit (lx) | K17 | DPT 9.004 | Externe Helligkeit, Lux-skaliert | `ExtBrightnessDpt = Lux` |
+| Externe Farbtemperatur (K) | K18 | DPT 7.600 | Externe CT-Quelle | `ExtColorTempDpt = Kelvin` |
+| Externe Farbtemperatur (Skalar) | K19 | DPT 5.001 | Externe CT, skaliert | `ExtColorTempDpt = Skalar` |
+
+<!-- DOC HelpContext="HCL-Achsen" -->
+## HCL-Achsen (F1)
+
+Per-Kanal-Parameter **HCL-Achsen** (`CHHclAxes`) bestimmt, welche Ausgangsgrößen der Kanal produziert:
+
+- **Aus**: HCL ist deaktiviert. K00/K01/K08/K11/K12/K13/K14/K15 senden nicht, `onLightManagerPartial()` wird nicht aufgerufen, `IntegrationMode`/`BusStatusEnable`/`StatusKoOutput` sind in ETS ausgeblendet.
+- **Helligkeit + Farbtemperatur** (Default): beide Achsen aktiv.
+- **Nur Farbtemperatur**: K00 (Brightness) und K13 (NextBrightness) verstummen; `validMask` an Senken auf Bit 0 reduziert.
+- **Nur Helligkeit**: K01 (ColorTemp) und K12 (NextColorTemp) verstummen; `validMask` an Senken auf Bit 1 reduziert.
+
+Die Filterung greift in `_shouldSendAxis()` **vor** dem KO-Send und vor dem partial-Sink-Aufruf. K11/K14/K15 sind achsen-neutral und gelten als „aktiv" sobald mindestens eine Achse aktiv ist.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Zeitfenster" -->
+## HCL-Zeitfenster (F1)
+
+Per-Kanal-Parameter **HCL-Zeitfenster** (`CHHclTimeWindow`):
+
+- **Immer** (Default): kein Zeit-Gate.
+- **Nur tagsüber**: K00/K01/K08/K11–K15 senden nur zwischen Sonnenaufgang und Sonnenuntergang.
+- **Nur nachts**: nur außerhalb dieses Bereichs.
+
+Achsen- und Zeit-Filter sind **UND**-verknüpft. Tag/Nacht-Quelle ist `DayNightSource`; bei `Aus` greift intern eine Astronomie-Berechnung als Fallback, damit das Zeit-Gate auch ohne projektiertes K06 funktioniert.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Vorausschau" -->
+## HCL-Vorausschau (F3)
+
+Per-Kanal aktivierbar über `PreviewEnable`. Wenn aktiviert, sendet der Kanal:
+
+- **K11 Minuten bis nächstem Stützpunkt** (DPT 7.006)
+- **K12 Nächste Farbtemperatur** (DPT 7.600)
+- **K13 Nächste Helligkeit** (DPT 5.001)
+
+`LookAheadMinutes` legt fest, wie weit voraus gescannt wird. Δ-Schwellen verhindern Bus-Spam: ΔK ≥ 50 K, ΔBrightness ≥ 1 %, ΔMinutes ≥ 1.
+
+Bei leerem Profil (kein aktiver SP) wird kein Send ausgeführt.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Fortschritt" -->
+## HCL-Fortschritt (F4)
+
+Per-Kanal aktivierbar über `ProgressEnable`. Sendet:
+
+- **K14 Tagesfortschritt** (DPT 5.001, 0…100 %): lineare Position zwischen erstem und letztem aktiven Stützpunkt des Tages.
+- **K15 Tagesphase** (DPT 5.010): 0 = vor Sonnenaufgang, 1 = Vormittag, 2 = Mittag (±1 h um Solar-Noon), 3 = Nachmittag, 4 = Abend, 5 = Nacht.
+
+Quelle für die Phasen-Berechnung ist die interne Sonnenstands-Engine.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Slewrate-TagNacht" -->
+## HCL-Slewrate Tag/Nacht (F5, Per-Kanal)
+
+`UseDayNightSlew=Nein` → `_slewRate` 24/7 konstant.
+
+`UseDayNightSlew=Ja`:
+
+| DayNightSource | Verhalten |
+|---|---|
+| **KO** | `SlewRateNight` wenn K06=0, sonst `SlewRateDay` |
+| **AstroIntern** | `SlewRateNight` wenn Sonne unter Horizont, sonst `SlewRateDay` |
+| **Aus** | Fallback auf `SlewRateDay` (kein Wechsel) |
+
+Per-Kanal — kein Master-Aggregat. Jeder Kanal entscheidet eigenständig.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Profile" -->
+## HCL-Profile (F7)
+
+Pro Master stehen bis zu **4 Profil-Slots** mit je **10 Stützpunkten** (SetpointV2) zur Verfügung. `ProfileCount` (1–4) limitiert sichtbare Slots.
+
+Jedes Profil besitzt eine **Wochentag-/Sonderbedingungs-Maske** (16 Bit, davon 12 genutzt):
+
+| Bit | Bedeutung |
+|---|---|
+| 0–6 | Mo, Di, Mi, Do, Fr, Sa, So |
+| 7 | Urlaub (`KoLOG_Vacation`) |
+| 8 | Feiertag (OFM-LogicModule) |
+| 9 | **Default-Fallback** (exklusiv: bei gesetztem Bit 9 werden alle anderen Bits ignoriert) |
+| 10 | Sommer |
+| 11 | Winter |
+
+**Selektor-Spezifität**: Profile mit konkreter Wochentag-/Saison-Übereinstimmung gewinnen gegen Default-Fallback. Bei mehreren passenden Profilen gewinnt das Profil mit der höchsten Spezifität (Anzahl gesetzter, matchender Bits).
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Stuetzpunkte" -->
+## HCL-Stützpunkte (F8)
+
+Jeder Stützpunkt (SetpointV2) trägt:
+
+- **AnchorType**: `FixedTime`, `Sunrise±`, `Sunset±`, `CivilDawn±`, `CivilDusk±`, `SolarNoon±`
+- **AnchorOffsetMin** (–720…+720 min)
+- **ClampMode**: Frei / Nicht vor / Nicht nach / Festklemmen
+- Kelvin (1500–10000) und Brightness (0–100 %)
+- Per-SP **ExtColorTempMode** (Off / Always / OnlyGreater / OnlySmaller) und **ExtMixPercent**
+
+Anker werden in `tickAstro()` aus dem aktuellen Sonnenstand aufgelöst; ein DST-Cache vermeidet Re-Resolves außerhalb von Datums-/DST-Wechseln.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Saison-Quelle" -->
+## Saison-Quelle (F7-Hybrid)
+
+Per-Master `SeasonSource`:
+
+- **Aus**: Profile mit Sommer/Winter-Bit matchen nicht (saison-neutral). Sommer-Stützpunkte deaktiviert.
+- **Automatisch (DST)**: nutzt System-DST-Flag; optional `SeasonOffsetDays` für regionale Verschiebung.
+- **Festes Datum**: `SummerStart`/`SummerEnd` als (Monat, Tag); unterstützt Jahreswechsel-Übergang (Südhalbkugel).
+- **Per KO**: K04 `SeasonInput` (DPT 1.001) schaltet zur Laufzeit.
+
+**Initialisierung** (`SummerActiveInit`): Nichts / Vom Bus lesen / Winter (0) / Sommer (1).
+
+**Persistenz** (`SummerActiveSavePower=Ja`): letzter K04-Wert in `OpenKNX::Flash` (Per-Master Slot `{magic:0x03, summerActive:bool}`); überschreibt Init beim Reboot. Bei `Nein` wird der Slot mit `0x00`-Bytes überschrieben. Magic 0x03 ⇒ Layout-Mismatch (z. B. alter 0x02-Block) wird erkannt und ignoriert.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Sperre-Kanal" -->
+## Per-Kanal-Sperre (F2)
+
+Parameter **CHUseLock** (3-Wege):
+
+- **Nein**: K02/K03/K09/K10 in ETS unsichtbar, Handler ignorieren Telegramme, Rückfall-Block weg.
+- **Vollsperre**: nur K02 (Eingang) + K03 (Status) sichtbar; sperrt beide Achsen.
+- **Getrennt**: zusätzlich **K09 LockColor** und **K10 LockBrightness** (DPT 1.003 disable/enable) sichtbar. Einseitige Sperre friert nur die betroffene Achse ein. K08-Validity-Bit reflektiert achsenspezifisch.
+
+**Hierarchie**: K02 = 1 dominiert über K09/K10. Globale Sperre (Modul-K02/K03/K04) dominiert über **alle** Per-Kanal-Locks, auch bei `UseLock=Nein`. Lock-Auswertung liegt **vor** `_shouldSendAxis()`.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Sperre-Rueckfall-Kanal" -->
+## Rückfallstrategie nach Per-Kanal-Sperre
+
+Per-Kanal `FallbackPolicy` (6 Werte):
+
+| Wert | Verhalten |
+|---|---|
+| **Definierte Rückfallzeit** | `LockFallback` (Minuten) — Auto-Release nach Ablauf |
+| **Freie Dauer** | `FallbackDurationSec` (Sekunden) frei konfigurierbar |
+| **Freie Uhrzeit** | `FallbackReleaseTime` (HH:MM) — Release am nächsten Erreichen |
+| **Dauer oder Uhrzeit** | Was zuerst eintritt |
+| **Nur externes Entsperren** | Kein Auto-Release, bleibt bis K02=0 |
+| **Deaktiviert** | Bleibt bis Reboot |
+
+Gilt einheitlich für alle aktiven Per-Kanal-Locks (Vollsperre und Getrennt). Bei Getrennt-Modus + K09=1 + K02=1 gleichzeitig werden beim Auto-Release beide gemeinsam freigegeben.
+
+Globaler und Per-Kanal-Fallback laufen **unabhängig** auf ihren jeweiligen Lock-Quellen.
+<!-- DOCEND -->
+
+<!-- DOC HelpContext="HCL-Externe-Eingaenge" -->
+## Externe Eingänge (F12 + L6)
+
+Per-Kanal überschreib- oder fallback-bare Werte aus externen Quellen:
+
+**Farbtemperatur** (`ExtColorTempSource` = Aus / Override / Fallback):
+- `ExtColorTempDpt = 2B Kelvin` → **K18 ExtColorTempKelvin** (DPT 7.600), Bereich 1500…10000 K.
+- `ExtColorTempDpt = 1B Skalar` → **K19 ExtColorTempScalar** (DPT 5.001, 0…255), mit Skalierung `k = ExtKelvinMin + scalar * (ExtKelvinMax − ExtKelvinMin) / 255` (Defaults 2700 / 6500 K).
+
+**Helligkeit** (`ExtBrightnessSource` = Aus / Override / Fallback):
+- `ExtBrightnessDpt = 1B Prozent` → **K16 ExtBrightnessPercent** (DPT 5.001, 0…100 %).
+- `ExtBrightnessDpt = 2B Lux` → **K17 ExtBrightnessLux** (DPT 9.004), mit Skalierung `pct = lux * 100 / ExtLuxMax` (Default 500 lx).
+
+**Fallback-Timeout** (`ExtFallbackTimeoutSec`): bei Fallback-Modus springt der Kanal nach Ablauf ohne neues Telegramm zurück auf den internen HCL-Wert.
+
+Per-SP **ExtColorTempMode** + **ExtMixPercent** erlauben gezieltes Mischen (z. B. „abends nur einbeziehen wenn externer Wert kleiner ist"). Mix-Formel: `(interp * (100 − mix) + extK * mix) / 100`.
+<!-- DOCEND -->
+
+## Migration auf 0.4.0
+
+> **Breaking — Kanalauswahl.** Der Parameter „Verfügbare Kanäle" entfällt. Nach dem ETS-Update sind **alle Lichtmanager deaktiviert** und müssen im Tab **Kanalauswahl** wieder aktiviert werden. Die Einstellungen der einzelnen Lichtmanager bleiben erhalten.
+
+- Konsumenten-Module (z. B. OFM-HueGatewayModule ab 0.8.0) prüfen die Zuordnung zur Laufzeit: Ein zugeordneter, aber deaktivierter oder suspendierter Lichtmanager wird ignoriert und im Log gemeldet.
+- API: `getMasterCount()` liefert die höchste mögliche Master-Nummer; ob ein Lichtmanager existiert, zeigt `channel(n) != nullptr` bzw. `getMaster(n) != nullptr`.
+
+<!-- DOC HelpContext="Migration-0.3.0" -->
+## Migration auf 0.3.0
+
+> **Breaking — keine Auto-Migration aus 0.2.x.** ETS-Projekte aus 0.2.x sind nicht migrationsfähig; alle HCL-Konfigurationen müssen je Lichtmanager neu projektiert werden.
+
+**Wesentliche Änderungen**:
+- HCL-Datenmodell auf **ProfileV2** umgestellt: 4 Profile × 10 Stützpunkte je Master, mit Wochentag-/Saison-/Default-Maske.
+- **62 Legacy-Stützpunkt-Parameter** entfernt; `CurveType`-Parameter komplett gestrichen.
+- **`KoBlockSize` wächst von 12 auf 22**: nachgelagerte Module (insb. OFM-HueGatewayModule) müssen ihre `KoOffset`/`KoSingleOffset` neu berechnen. Alle Gruppenadressen nachgelagerter Module müssen neu verknüpft werden.
+- `SeasonMode` → `SeasonSource` umbenannt; Werte abgebildet wie folgt:
+  - 0.2 `Standard` → 0.3 `Aus`
+  - 0.2 `Automatisch (DST)` → 0.3 `Automatisch (DST)`
+  - 0.2 `Festes Datum` → 0.3 `Festes Datum`
+  - 0.2 `Per KO` → 0.3 `Per KO`
+- **NVS-Magic 0x02 → 0x03**: alte Per-Master-Summer-Slots werden beim Boot ignoriert; `SummerActiveInit` greift, neuer Block mit Magic 0x03 wird geschrieben.
+- Variante-E-Dispatch ersetzt 0.2.0 `StatusKoEnable`/`StatusKoDpt`: neue Parameter `IntegrationMode`, `BusStatusEnable`, `StatusKoOutput` mit feiner KO-Granularität.
+
+**Out-of-Box**: nach ETS-Download liefert HCL sofort Werte (Default-SPs in Profil 1: morgens 2700 K / 30 %, mittags 5000 K / 80 %, abends 2700 K / 20 %).
+<!-- DOCEND -->
 
 <!-- DOC -->
 ## Häufige Fehler und Lösungen
 
 ### Lichtmanager-Parameter oder HCL-KOs fehlen
 - Lichtmanager global aktiviert?
-- Anzahl Lichtmanager in **Lichtmanager Auswahl** ausreichend?
+- Lichtmanager in der **Kanalauswahl** aktiviert?
 - Erst nach Aktivierung des globalen Lichtmanagers werden Zuordnung und Sperrparameter sichtbar.
 
 ### Lichtmanager wirkt nicht
 - Lichtmanager global aktiviert?
 - Manager im Konsumenten-Modul zugewiesen?
+- Manager in der **Kanalauswahl** aktiviert und nicht **Suspendiert**?
 - Bei `FixedTime`/`SunPosition`: mind. 2 gültige Stützpunkte?
 - Bei `Manual`: gewünschte manuelle Farbtemperatur gesetzt und optionaler Helligkeitsverlauf passend parametriert?
 - Bei `Astronomischer Sonnenstand`: sinnvolle Astro-Min/Max-Werte gesetzt?

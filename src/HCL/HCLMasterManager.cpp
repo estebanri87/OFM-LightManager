@@ -8,16 +8,12 @@ MasterManager masterManager;
 MasterManager::MasterManager()
     : _enabled(false)
     , _applyBlocked(false)
-    , _updateIntervalMs(60000)
-    , _fadeDurationSec(5)
-    , _lastUpdateMs(0)
     , _lastTimeMinutes(0xFFFF)
     , _lastDayOfYear(-1)
 {
 }
 
 void MasterManager::setup() {
-    _lastUpdateMs = millis();
     _lastTimeMinutes = 0xFFFF;
     _lastDayOfYear = -1;
 }
@@ -29,13 +25,10 @@ void MasterManager::loop(uint16_t currentTimeMinutes, int16_t dayOfYear) {
     // with currentTimeMinutes=0 would falsely apply the SP1 setpoint.
     if (dayOfYear < 0) return;
 
-    uint32_t now = millis();
-    if ((now - _lastUpdateMs) >= _updateIntervalMs
-        || _lastTimeMinutes != currentTimeMinutes
+    if (_lastTimeMinutes != currentTimeMinutes
         || _lastDayOfYear   != dayOfYear)
     {
         updateCurrentValues(currentTimeMinutes, dayOfYear);
-        _lastUpdateMs    = now;
         _lastTimeMinutes = currentTimeMinutes;
         _lastDayOfYear   = dayOfYear;
     }
@@ -59,28 +52,17 @@ bool MasterManager::isMasterApplyBlocked(uint8_t masterNum) const {
 }
 
 void MasterManager::forceUpdate() {
-    _lastUpdateMs = 0;
-}
-
-uint32_t MasterManager::getTimeUntilNextUpdate() const {
-    uint32_t now = millis();
-    uint32_t elapsed = now - _lastUpdateMs;
-    return (elapsed >= _updateIntervalMs) ? 0 : (_updateIntervalMs - elapsed);
+    _lastTimeMinutes = 0xFFFF;
 }
 
 void MasterManager::updateCurrentValues(uint16_t currentTimeMinutes, int16_t dayOfYear) {
-    if (_provider == nullptr) return;
-    const uint8_t count = _provider->providerMasterCount();
-    uint32_t now = millis();
-    for (uint8_t i = 1; i <= count; i++) {
-        Master* m = _provider->providerGetMaster(i);
-        if (m == nullptr || !m->isValid()) continue;
-        InterpolatedValue val = m->calculateValue(currentTimeMinutes, now, dayOfYear);
-        _provider->providerSetCurrentValue(i, val);
-        #ifdef DEBUG_HCL
-        Serial.printf("[HCL] Master %d: %dK, %d%%\n", i, val.kelvin, val.brightness);
-        #endif
-    }
+    // Phase 2.J.c: legacy master-level curve evaluation (isValid / calculateValue /
+    // providerSetCurrentValue) retired. ProfileV2 resolves per-channel in
+    // LightManagerChannel::loopHcl() instead. This stub is kept so existing
+    // forceUpdate()/loop() bookkeeping stays intact until Phase 2.K wires
+    // adaptive-brightness back into the ProfileV2 pipeline.
+    (void)currentTimeMinutes;
+    (void)dayOfYear;
 }
 
 void MasterManager::setMasterAmbientLux(uint8_t masterNum, float lux) {
